@@ -49,37 +49,44 @@ def creating_xlsl():
     return file_name
 
 
-# param match is a list type
+def check_and_handle_key(dictinary, key):
+    if key in dictinary:
+        return dictinary[key]
+    else:
+        return ' - '
+
+
 def prepare_for_inserting(match):
-    ready_list = list(range(0, 20))
+    ready_list = list()
+    for pos in range(20):
+        ready_list.append(' - ')
     for item in match:
-        for key, val in item.items():
+        for key in item:
             if key == 'veikkaus':
-                ready_list[1] = item[key]['odds_1']
-                ready_list[2] = item[key]['odds_2']
+                ready_list[1] = check_and_handle_key(item[key], 'odds_1')
+                ready_list[2] = check_and_handle_key(item[key], 'odds_2')
             elif key == 'time':
-                ready_list[3] = item['time']
+                ready_list[3] = check_and_handle_key(item, 'time')
             elif key == 'bet365':
-                ready_list[4] = item[key]['odds_1']
-                ready_list[5] = item[key]['odds_2']
-                ready_list[6] = item[key]['col_1']
-                ready_list[7] = item[key]['col_2']
+                ready_list[4] = check_and_handle_key(item[key], 'odds_1')
+                ready_list[5] = check_and_handle_key(item[key], 'odds_2')
+                ready_list[6] = check_and_handle_key(item[key], 'col_1')
+                ready_list[7] = check_and_handle_key(item[key], 'col_2')
             elif key == 'William Hill':
-                ready_list[8] = item[key]['odds_1']
-                ready_list[9] = item[key]['odds_2']
-                ready_list[10] = item[key]['col_1']
-                ready_list[11] = item[key]['col_2']
+                ready_list[8] = check_and_handle_key(item[key], 'odds_1')
+                ready_list[9] = check_and_handle_key(item[key], 'odds_2')
+                ready_list[10] = check_and_handle_key(item[key], 'col_1')
+                ready_list[11] = check_and_handle_key(item[key], 'col_2')
             elif key == '1xBet':
-                ready_list[12] = item[key]['odds_1']
-                ready_list[13] = item[key]['odds_2']
-                ready_list[14] = item[key]['col_1']
-                ready_list[15] = item[key]['col_2']
+                ready_list[12] = check_and_handle_key(item[key], 'odds_1')
+                ready_list[13] = check_and_handle_key(item[key], 'odds_2')
+                ready_list[14] = check_and_handle_key(item[key], 'col_1')
+                ready_list[15] = check_and_handle_key(item[key], 'col_2')
             elif key == 'Pinnacle':
-                ready_list[16] = item[key]['odds_1']
-                ready_list[17] = item[key]['odds_2']
-                ready_list[18] = item[key]['col_1']
-                ready_list[19] = item[key]['col_2']
-    print(ready_list)
+                ready_list[16] = check_and_handle_key(item[key], 'odds_1')
+                ready_list[17] = check_and_handle_key(item[key], 'odds_2')
+                ready_list[18] = check_and_handle_key(item[key], 'col_1')
+                ready_list[19] = check_and_handle_key(item[key], 'col_2')
     return ready_list
 
 
@@ -94,185 +101,4 @@ def write_to_excel(matches_data):
         ws.insert_rows(checker)
         ws.append(inserting_row)
         checker += 1
-        wb.save(file_name)
     wb.save(file_name)
-
-# dict_d = {
-#     'R.Nadal - N.Basilashvili': [
-#         {
-#             'veikkaus': {
-#                 'odds_1': '1,04',
-#                 'odds_2': '8,40'
-#             }
-#         },
-#         {
-#             'time': '04 Jan 2020, 12:00'
-#         },
-#         {
-#             'bet365': {
-#                 'col_1': '1.04',
-#                 'odds_1': '1.05',
-#                 'col_2': '9.00',
-#                 'odds_2': '8.50'
-#             }
-#         },
-#         {
-#             'William Hill': {
-#                 'col_1': '1.05',
-#                 'odds_1': '1.04',
-#                 'col_2': '10.00',
-#                 'odds_2': '9.00'
-#             }
-#         },
-#         {
-#             '1xBet': {
-#                 'col_1': '1.03',
-#                 'odds_1': '1.09',
-#                 'col_2': '16.00',
-#                 'odds_2': '11.00'
-#             }
-#         },
-#         {
-#             'Pinnacle': {
-#                 'col_1': '1.07',
-#                 'odds_1': '1.05',
-#                 'col_2': '10.01',
-#                 'odds_2': '11.94'
-#             }
-#         }
-#     ],
-#     'D.Kuzmanov - A.Cozbinov': [
-#         {
-#             'veikkaus': {
-#                 'odds_1': '1,07',
-#                 'odds_2': '7,00'
-#             }
-#         },
-#         {
-#             'time': '05 Jan 2020, 00:00'
-#         },
-#         {
-#             'bet365': {
-#                 'col_1': '1.08',
-#                 'col_2': '7.00'
-#             }
-#         },
-#         {
-#             'William Hill': {
-#                 'col_1': '1.07',
-#                 'col_2': '8.00'
-#             }
-#         },
-#         {
-#             '1xBet': {
-#                 'col_1': '1.11',
-#                 'odds_1': '1.06',
-#                 'col_2': '7.10',
-#                 'odds_2': '14.50'
-#             }
-#         },
-#         {
-#             'Pinnacle': {
-#                 'col_1': '1.11',
-#                 'odds_1': '1.06',
-#                 'col_2': '7.60',
-#                 'odds_2': '12.97'
-#             }
-#         }
-#     ],
-#     'F.Fognini - Ca.Ruud': [
-#         {
-#             'veikkaus': {
-#                 'odds_1': '1,38',
-#                 'odds_2': '2,80'
-#             }
-#         }
-#     ],
-#     'S.Darcis - C.Norrie': [
-#         {
-#             'veikkaus': {
-#                 'odds_1': '2,95',
-#                 'odds_2': '1,35'
-#             }
-#         },
-#         {
-#             'time': '05 Jan 2020, 07:30'
-#         },
-#         {
-#             'bet365': {
-#                 'col_1': '2.75',
-#                 'odds_1': '2.75',
-#                 'col_2': '1.40',
-#                 'odds_2': '1.40'
-#             }
-#         },
-#         {
-#             'William Hill': {
-#                 'col_1': '2.90',
-#                 'odds_1': '2.50',
-#                 'col_2': '1.40',
-#                 'odds_2': '1.40'
-#             }
-#         },
-#         {
-#             '1xBet': {
-#                 'col_1': '2.90',
-#                 'odds_1': '2.44',
-#                 'col_2': '1.44',
-#                 'odds_2': '1.59'
-#             }
-#         },
-#         {
-#             'Pinnacle': {
-#                 'col_1': '2.96',
-#                 'odds_1': '2.04',
-#                 'col_2': '1.44',
-#                 'odds_2': '1.84'
-#             }
-#         }
-#     ],
-#     'D.Medvedev - J.Isner': [
-#         {
-#             'veikkaus': {
-#                 'odds_1': '1,27',
-#                 'odds_2': '3,45'
-#             }
-#         },
-#         {
-#             'time': '05 Jan 2020, 12:00'
-#         },
-#         {
-#             'bet365': {
-#                 'col_1': '1.28',
-#                 'odds_1': '1.28',
-#                 'col_2': '3.50',
-#                 'odds_2': '3.50'
-#             }
-#         },
-#         {
-#             'William Hill': {
-#                 'col_1': '1.33',
-#                 'odds_1': '1.33',
-#                 'col_2': '3.30',
-#                 'odds_2': '3.30'
-#             }
-#         },
-#         {
-#             '1xBet': {
-#                 'col_1': '1.32',
-#                 'odds_1': '1.35',
-#                 'col_2': '3.54',
-#                 'odds_2': '3.36'
-#             }
-#         },
-#         {
-#             'Pinnacle': {
-#                 'col_1': '1.29',
-#                 'odds_1': '1.33',
-#                 'col_2': '3.86',
-#                 'odds_2': '3.51'
-#             }
-#         }
-#     ]
-# }
-# write_to_excel(dict_d)

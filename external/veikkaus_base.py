@@ -20,9 +20,6 @@ class VeikkausBase:
                 checker_class = detail.get_attribute_list('class')
                 if 'event-info' in checker_class:
                     event_title = detail.find('span', {'class': 'event-title'}).text
-                    event_number = detail.find('span', {'class': 'event-number'}).text
-                    # tennis_dict[event_number] = game_dict
-                    # dtls_dict
                     game_dict[event_title] = source_list
 
                 elif 'event-outcome-holder' in checker_class:
@@ -39,4 +36,5 @@ class VeikkausBase:
                     dtls_dict[source_name] = odd_dict
                     game_dict[event_title] = source_list
                     source_list.append(dtls_dict)
-        print(game_dict)
+        # print(game_dict)
+        return game_dict

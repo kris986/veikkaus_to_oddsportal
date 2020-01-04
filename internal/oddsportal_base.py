@@ -31,7 +31,7 @@ class OddsportalBase:
                 data_dict[event_title].append(pinnacle)
             else:
                 pass
-        print(data_dict)
+        return data_dict
 
     def try_searching(self, driver, phrase):
         try:
@@ -43,11 +43,11 @@ class OddsportalBase:
             self.wait_visibility_css_selector(driver, 'div.spc.filterOpts')
         except NoSuchElementException as e:
             print(e.msg)
+            pass
 
     def handling_search_results_page(self, driver, search_phrase):
         result_phrase = driver.find_elements_by_css_selector('td.name a')
         for a in result_phrase:
-            # print(a.get_attribute('href'))
             if '/tennis/' in a.get_attribute('href'):
                 if self.compare_phrase_and_results(search_phrase, a.text):
                     a.click()
@@ -69,10 +69,6 @@ class OddsportalBase:
         bookmaker_dict[bookmaker_name] = odd_dict
         try:
             self.wait_visibility_css_selector(driver, ".table-container")
-            # time = driver.find_element_by_css_selector('div#col-content p.date').text
-            # time = re.sub(r'^[a-zA-Z]*,\s', '', time)
-            # bookmaker_dict['time'] = time
-
             action = ActionChains(driver)
             trs = driver.find_elements_by_css_selector('table.table-main tr.lo')
             for tr in trs:
@@ -119,7 +115,3 @@ class OddsportalBase:
             return True
         else:
             return False
-
-
-# a = OddsportalBase()
-# a.compare_phrase_and_results('Djokovic - K.Anderson', 'Djokovic N. - Anderson K.')
