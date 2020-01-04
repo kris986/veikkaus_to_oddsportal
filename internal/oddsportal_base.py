@@ -108,7 +108,7 @@ class OddsportalBase:
         result_phrase = result_phrase.upper()
         search_list = set(search_phrase.split(' '))
         result_list = set(result_phrase.split(' '))
-        # print(search_list)
+        # print(search_list)  # For testing
         # print(result_list)
         # print(result_list.symmetric_difference(search_list))
         if len(result_list.symmetric_difference(search_list)) <= 1:
