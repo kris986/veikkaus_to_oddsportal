@@ -28,6 +28,7 @@ def run_driver():
 
 def go_to_url(driver, page_url, pref_url=''):
     url = urllib.parse.urljoin(page_url, pref_url)
+    print('Driver run')
     driver.get(url)
     sleep(2)
     return driver
@@ -40,10 +41,16 @@ if __name__ == "__main__":
     driver = run_driver()
     try:
         go_to_url(driver, veikkaus_url)
+        print('Started collect data on veikkaus...')
         data_dict = veikkaus_base.collect_tennis_data(driver)
+        print('Ended collect data on veikkaus')
         go_to_url(driver, oddsportal_url)
+        print('Started collect data on oddsportal...')
         data_dict = oddssportal_base.collect_data_by_dict(driver, data_dict)
+        print('Ended collect data on oddsportal')
+        print('Creating excel file')
         write_to_excel(data_dict)
+        print('Parsing is finished')
     except Exception as e:
         print(e)
     finally:
