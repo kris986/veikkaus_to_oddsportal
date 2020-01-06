@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.options import Options
 
 veikkaus_base = VeikkausBase()
 oddssportal_base = OddsportalBase()
+vdisplay = Xvfb()
 
 
 def run_driver():
@@ -32,7 +33,6 @@ def go_to_url(driver, page_url, pref_url=''):
 
 
 if __name__ == "__main__":
-    vdisplay = Xvfb()
     vdisplay.start()
     veikkaus_url = 'https://www.veikkaus.fi/fi/pitkaveto?sportId=10&selectedLeagues=10-all'
     oddsportal_url = "https://www.oddsportal.com"
