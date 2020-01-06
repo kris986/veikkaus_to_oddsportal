@@ -1,18 +1,26 @@
 #!/usr/bin/env python3
 import urllib
 from time import sleep
+from xvfbwrapper import Xvfb
 
 from selenium import webdriver
 from external.veikkaus_base import VeikkausBase
 from internal.oddsportal_base import OddsportalBase
 from build_xlsx import write_to_excel
+from selenium.webdriver.chrome.options import Options
 
 veikkaus_base = VeikkausBase()
 oddssportal_base = OddsportalBase()
 
 
 def run_driver():
-    driver = webdriver.Chrome()
+    # version for Windows
+    # driver = webdriver.Chrome()
+    # version for Linux
+    chrome_options = Options()
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-setuid-sandbox")
+    driver = webdriver.Chrome('/usr/local/bin/chromedriver', chrome_options=chrome_options)
     return driver
 
 
@@ -24,6 +32,8 @@ def go_to_url(driver, page_url, pref_url=''):
 
 
 if __name__ == "__main__":
+    vdisplay = Xvfb()
+    vdisplay.start()
     veikkaus_url = 'https://www.veikkaus.fi/fi/pitkaveto?sportId=10&selectedLeagues=10-all'
     oddsportal_url = "https://www.oddsportal.com"
     driver = run_driver()
@@ -37,4 +47,5 @@ if __name__ == "__main__":
         print(e)
     finally:
         driver.close()
+        vdisplay.stop()
         quit()

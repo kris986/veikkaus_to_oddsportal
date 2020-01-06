@@ -1,3 +1,4 @@
 beautifulsoup4==4.8.2
 openpyxl==3.0.2
 selenium==3.141.0
+xvfbwrapper==0.2.9
