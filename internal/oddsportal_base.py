@@ -88,9 +88,9 @@ class OddsportalBase:
                                 soup = BeautifulSoup(coefficient.get_attribute('innerHTML'), 'html.parser')
                                 data = soup.findAll('strong')[-1].text
                                 if data == 'Click to BET NOW':
-                                    data = soup.findAll('strong')[-3].text
-                                else:
                                     data = soup.findAll('strong')[-2].text
+                                else:
+                                    data = soup.findAll('strong')[-1].text
                                 odd_dict[f'odds_{checker}'] = data
                             except Exception:
                                 pass
