@@ -13,16 +13,23 @@ veikkaus_base = VeikkausBase()
 oddssportal_base = OddsportalBase()
 vdisplay = Xvfb()
 
+# version for Linux
+# def run_driver():
+#     chrome_options = Options()
+#     chrome_options.add_argument("--no-sandbox")
+#     chrome_options.add_argument("--disable-setuid-sandbox")
+#     driver = webdriver.Chrome(chrome_options=chrome_options)
+#     return driver
 
+
+# version for Windows
 def run_driver():
-    # version for Windows
+    # init driver with options if script will run on Win Corporate version or Pro
+    options = webdriver.ChromeOptions()
+    options.add_argument('--disable-features=RendererCodeIntegrity')
+    driver = webdriver.Chrome(options=options)
+
     # driver = webdriver.Chrome()
-    # version for Linux
-    chrome_options = Options()
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-setuid-sandbox")
-    driver = webdriver.Chrome(chrome_options=chrome_options)
-    # driver = webdriver.Chrome(executable_path='/usr/local/bin/chromedriver', chrome_options=chrome_options)
     return driver
 
 
