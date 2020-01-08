@@ -48,14 +48,13 @@ def creat_xlsl_file():
     ws['U2'] = 'col_1'
     ws['V2'] = 'col_2'
 
-    timestamp = datetime.now().strftime("%Y%m%d")
-    file_name = 'result-' + timestamp + '.xlsx'
+    file_name = 'result.xlsx'
     wb.save(file_name)
     return file_name
 
 
 def xlsl_file_exists():
-    file_name = 'result-' + datetime.now().strftime("%Y%m%d") + '.xlsx'
+    file_name = 'result.xlsx'
     try:
         work_book = load_workbook(file_name)
         return work_book
@@ -65,9 +64,7 @@ def xlsl_file_exists():
 
 
 def update_xlsl_file(matches_data):
-    # timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    # work_book = False
-    file_name = 'result-' + datetime.now().strftime("%Y%m%d") + '.xlsx'
+    file_name = 'result.xlsx'
     work_book = xlsl_file_exists()
     if work_book:
         write_to_xlsl(work_book, matches_data)
@@ -93,45 +90,35 @@ def match_exist_in_sheet(ws, match):
 
 
 def update_row(ws, num_of_row, inserting_row):
-    # for creating coordinates of cell
-    # cols_for_changing = ['D', 'E', 'F' ,'G']
+    # create list of letters(char type)
     cols_for_changing = list()
     cols = range(68, 87)
     for col in cols:
         cols_for_changing.append(chr(col))
-    # print(cols_for_changing)
-    # print(ord('D'), ord('V'))
-    # inserting_row = ['odds_1_new', 'odds_2_new', 'Time new']
+    # end create list of letters(char type)
     ind = 3
     for col in cols_for_changing:
-        # print(f'{col}{num_of_row}')
+        cell = f'{col}{num_of_row}'
+        # for updating cells of Veikkaus odds fields, Time of match
         if ind < 6:
-            ws[f'{col}{num_of_row}'].value = inserting_row[ind]
-        elif ws[f'{col}{num_of_row}'].value == ' - ' and ind > 5:
-            ws[f'{col}{num_of_row}'].value = inserting_row[ind]
+            ws[cell].value = inserting_row[ind]
+        # for updating other cells
+        elif ws[cell].value == ' - ' and ind > 5:
+            ws[cell].value = inserting_row[ind]
         ind += 1
 
 
 def write_to_xlsl(work_book, matches_data):
-    # timestamp = list([datetime.now().strftime("Last update: %d/%m/%Y %H:%M:%S")])
     timestamp = str(datetime.now().strftime("Last update: %d/%m/%Y %H:%M:%S"))
-
-    file_name = 'result-' + datetime.now().strftime("%Y%m%d") + '.xlsx'
+    file_name = 'result.xlsx'
     ws = work_book.get_active_sheet()
-    # ws.append(timestamp)
     ws['A3'].value = timestamp  # inserting date of the last update
     for match in matches_data:
         match_exists = match_exist_in_sheet(ws, match)  # (int) return number of row where match is written
         if match_exists:
             inserting_row = prpr_for_insrt_exst_mtch(matches_data[match])
             inserting_row[0] = match
-
             update_row(ws, match_exists, inserting_row)
-            # print(f'A{match_exists}')
-            # ws[f'A{match_exists}'].value = f'hello New {match}'
-
-            # ws.insert_rows(match_exists)
-            # ws.append(inserting_row)
         else:
             inserting_row = prpre_for_insrt_new_match(matches_data[match])
             inserting_row[0] = match
