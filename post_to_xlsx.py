@@ -62,8 +62,6 @@ def xlsl_file_exists():
 
 
 def update_xlsl_file(matches_data):
-    # timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    # work_book = False
     file_name = 'result-' + datetime.now().strftime("%Y%m%d") + '.xlsx'
     work_book = xlsl_file_exists()
     if work_book:
@@ -78,14 +76,10 @@ def update_xlsl_file(matches_data):
 def write_to_xlsl(work_book, matches_data):
     timestamp = list([datetime.now().strftime("%d/%m/%Y Time: %H:%M:%S")])
     file_name = 'result-' + datetime.now().strftime("%Y%m%d") + '.xlsx'
-    # wb = load_workbook(file_name)
     ws = work_book.get_active_sheet()
-    checker = 3  # insert rows from 3 row. 2 first rows take header
-    # ws.insert_rows(checker)
     ws.append(timestamp)
     for match in matches_data:
         inserting_row = prepare_for_inserting(matches_data[match])
         inserting_row[0] = match
-        # ws.insert_rows(checker)
         ws.append(inserting_row)
     work_book.save(file_name)
