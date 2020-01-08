@@ -2,6 +2,8 @@ from datetime import datetime
 
 from openpyxl import Workbook, load_workbook
 
+from build_xlsx import prepare_for_inserting
+
 
 def creat_xlsl_file():
     wb = Workbook()
@@ -59,29 +61,31 @@ def xlsl_file_exists():
         return work_book
 
 
-def update_xlsl_file():
+def update_xlsl_file(matches_data):
     # timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     # work_book = False
     file_name = 'result-' + datetime.now().strftime("%Y%m%d") + '.xlsx'
     work_book = xlsl_file_exists()
     if work_book:
-        write_to_xlsl(work_book)
+        write_to_xlsl(work_book, matches_data)
     else:
         creat_xlsl_file()
         work_book = xlsl_file_exists()
-        write_to_xlsl(work_book)
+        write_to_xlsl(work_book, matches_data)
     work_book.save(file_name)
 
 
-def write_to_xlsl(work_book):
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+def write_to_xlsl(work_book, matches_data):
+    timestamp = list([datetime.now().strftime("%d/%m/%Y Time: %H:%M:%S")])
     file_name = 'result-' + datetime.now().strftime("%Y%m%d") + '.xlsx'
     # wb = load_workbook(file_name)
     ws = work_book.get_active_sheet()
-    checker = 0  # insert rows from 3 row. 2 first rows take header
-    ws.insert_rows(checker)
+    checker = 3  # insert rows from 3 row. 2 first rows take header
+    # ws.insert_rows(checker)
     ws.append(timestamp)
+    for match in matches_data:
+        inserting_row = prepare_for_inserting(matches_data[match])
+        inserting_row[0] = match
+        # ws.insert_rows(checker)
+        ws.append(inserting_row)
     work_book.save(file_name)
-
-
-update_xlsl_file()
