@@ -26,10 +26,10 @@ def run_driver():
 
 # version for Windows
 # def run_driver():
-#     # init driver with options if script will run on Win Corporate version or Pro
-#     # options = webdriver.ChromeOptions()
-#     # options.add_argument('--disable-features=RendererCodeIntegrity')
-#     # driver = webdriver.Chrome(options=options)
+    # init driver with options if script will run on Win Corporate version or Pro
+    # options = webdriver.ChromeOptions()
+    # options.add_argument('--disable-features=RendererCodeIntegrity')
+    # driver = webdriver.Chrome(options=options)
 
     # driver = webdriver.Chrome()
     # return driver
