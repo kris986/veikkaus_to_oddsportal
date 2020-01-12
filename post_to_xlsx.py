@@ -5,6 +5,8 @@ from openpyxl import Workbook, load_workbook
 from build_xlsx import prpre_for_insrt_new_match
 from build_xlsx import prpr_for_insrt_exst_mtch
 
+file_name = 'result.xlsx'
+
 
 def creat_xlsl_file():
     wb = Workbook()
@@ -21,40 +23,53 @@ def creat_xlsl_file():
     ws.merge_cells('F1:F2')
 
     ws['G1'] = 'bet365'  # creating header for bet365 data'
-    ws.merge_cells('G1:J1')
+    ws.merge_cells('G1:N1')
     ws['G2'] = 'odds_1'
     ws['H2'] = 'odds_2'
     ws['I2'] = 'col_1'
     ws['J2'] = 'col_2'
+    ws['K2'] = 'col_1_12h'
+    ws['L2'] = 'col_2_12h'
+    ws['M2'] = 'col_1_6h'
+    ws['N2'] = 'col_2_6h'
 
-    ws['K1'] = 'William Hill'  # creating header for William Hill data
-    ws.merge_cells('K1:N1')
-    ws['K2'] = 'odds_1'
-    ws['L2'] = 'odds_2'
-    ws['M2'] = 'col_1'
-    ws['N2'] = 'col_2'
-
-    ws['O1'] = '1xBet'  # creating header for 1xBet data
-    ws.merge_cells('O1:R1')
+    ws['O1'] = 'William Hill'  # creating header for William Hill data
+    ws.merge_cells('O1:V1')
     ws['O2'] = 'odds_1'
     ws['P2'] = 'odds_2'
     ws['Q2'] = 'col_1'
     ws['R2'] = 'col_2'
+    ws['S2'] = 'col_1_12h'
+    ws['T2'] = 'col_2_12h'
+    ws['U2'] = 'col_1_6h'
+    ws['V2'] = 'col_2_6h'
 
-    ws['S1'] = 'Pinnacle'  # creating header for Pinnacle data
-    ws.merge_cells('S1:V1')
-    ws['S2'] = 'odds_1'
-    ws['T2'] = 'odds_2'
-    ws['U2'] = 'col_1'
-    ws['V2'] = 'col_2'
+    ws['W1'] = '1xBet'  # creating header for 1xBet data
+    ws.merge_cells('W1:AD1')
+    ws['W2'] = 'odds_1'
+    ws['X2'] = 'odds_2'
+    ws['Y2'] = 'col_1'
+    ws['Z2'] = 'col_2'
+    ws['AA2'] = 'col_1_12h'
+    ws['AB2'] = 'col_2_12h'
+    ws['AC2'] = 'col_1_6h'
+    ws['AD2'] = 'col_2_6h'
 
-    file_name = 'result.xlsx'
+    ws['AE1'] = 'Pinnacle'  # creating header for Pinnacle data
+    ws.merge_cells('AE1:AL1')
+    ws['AE2'] = 'odds_1'
+    ws['AF2'] = 'odds_2'
+    ws['AG2'] = 'col_1'
+    ws['AH2'] = 'col_2'
+    ws['AI2'] = 'col_1_12h'
+    ws['AJ2'] = 'col_2_12h'
+    ws['AK2'] = 'col_1_6h'
+    ws['AL2'] = 'col_2_6h'
     wb.save(file_name)
     return file_name
 
 
 def xlsl_file_exists():
-    file_name = 'result.xlsx'
     try:
         work_book = load_workbook(file_name)
         return work_book
@@ -64,7 +79,6 @@ def xlsl_file_exists():
 
 
 def update_xlsl_file(matches_data):
-    file_name = 'result.xlsx'
     work_book = xlsl_file_exists()
     if work_book:
         write_to_xlsl(work_book, matches_data)
@@ -89,28 +103,72 @@ def match_exist_in_sheet(ws, match):
     return num_row
 
 
+def calc_delta_time(time):
+    try:
+        time = time.replace(',', '').replace(':', ' ')
+        tm = datetime.strptime(time, '%d %b %Y %H %M')
+        now = datetime.now()
+        delta = tm - now
+        delta = round((delta.seconds / 3600), 2)
+        print(delta)
+        return delta
+    except ValueError:
+        return 0
+
+
 def update_row(ws, num_of_row, inserting_row):
-    # create list of letters(char type)
+    # for creating coordinates of cell
     cols_for_changing = list()
-    cols = range(68, 87)
+    cols = range(68, 92)
     for col in cols:
-        cols_for_changing.append(chr(col))
-    # end create list of letters(char type)
+        if col == 91:
+            a_cols = range(65, 77)
+            for a_col in a_cols:
+                a_cols_for_changing = [65, a_col]
+                cols_for_changing.append(a_cols_for_changing)
+        else:
+            cols_for_changing.append(col)
     ind = 3
     for col in cols_for_changing:
-        cell = f'{col}{num_of_row}'
-        # for updating cells of Veikkaus odds fields, Time of match
+        ir = inserting_row[ind]
         if ind < 6:
-            ws[cell].value = inserting_row[ind]
-        # for updating other cells
-        elif ws[cell].value == ' - ' and ind > 5:
-            ws[cell].value = inserting_row[ind]
+            y = f'{chr(col)}{num_of_row}'
+            ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
+        elif ind in [8, 9, 16, 17, 24, 25, 32, 33]:
+           # calculate time. return delta time
+            delta = calc_delta_time(inserting_row[5])
+            # delta = 12
+            if 5.3 < delta < 6.8:
+                col_index = cols_for_changing.index(col) + 4
+                col = cols_for_changing[col_index]
+                if isinstance(col, list):
+                    z = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
+                    ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
+                else:
+                    p = f'{chr(col)}{num_of_row}'
+                    ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
+            elif 11.3 < delta < 12.8:
+                col_index = cols_for_changing.index(col) + 2
+                col = cols_for_changing[col_index]
+                if isinstance(col, list):
+                    x = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
+                    ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
+                else:
+                    o = f'{chr(col)}{num_of_row}'
+                    ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
+
+        if isinstance(col, list):
+            if ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value == ' - ' and ind > 5:
+                m = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
+                ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
+        else:
+            if ws[f'{chr(col)}{num_of_row}'].value == ' - ' and ind > 5:
+                ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
         ind += 1
 
 
 def write_to_xlsl(work_book, matches_data):
     timestamp = str(datetime.now().strftime("Last update: %d/%m/%Y %H:%M:%S"))
-    file_name = 'result.xlsx'
     ws = work_book.get_active_sheet()
     ws['A3'].value = timestamp  # inserting date of the last update
     for match in matches_data:
