@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 import urllib
 from time import sleep
 # from xvfbwrapper import Xvfb
@@ -47,27 +48,27 @@ if __name__ == "__main__":
     # vdisplay.start()
     veikkaus_url = 'https://www.veikkaus.fi/fi/pitkaveto?sportId=10&selectedLeagues=10-all'
     oddsportal_url = "https://www.oddsportal.com"
-    # driver = run_driver()
+    driver = run_driver()
     try:
-    #     go_to_url(driver, veikkaus_url)
-    #     print('Started collect data on veikkaus...')
-    #     data_dict = veikkaus_base.collect_tennis_data(driver)
-    #     print('Ended collect data on veikkaus')
-    #     go_to_url(driver, oddsportal_url)
-    #     print('Started collect data on oddsportal...')
-    #     data_dict = oddssportal_base.collect_data_by_dict(driver, data_dict)
+        go_to_url(driver, veikkaus_url)
+        print('Started collect data on veikkaus...')
+        data_dict = veikkaus_base.collect_tennis_data(driver)
+        print('Ended collect data on veikkaus')
+        go_to_url(driver, oddsportal_url)
+        print('Started collect data on oddsportal...')
+        data_dict = oddssportal_base.collect_data_by_dict(driver, data_dict)
     #     print('Ended collect data on oddsportal')
-        data_dict = {
-            'E.Bouchard - C.Garcia': [{'veikkaus': {'odds_1': '---', 'odds_2': '1,45'}}, {'time': '99 Jan'},
-                                      {'bet365': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.50', 'odds_2': '1.50'}},
-                                      {'William Hill': {'col_1': '2.38', 'odds_1': '2.60', 'col_2': '1.57', 'odds_2': '1.50'}},
-                                      {'1xBet': {'col_1': '2.58', 'odds_1': '2.69', 'col_2': '1.49', 'odds_2': '1.47'}},
-                                      {'Pinnacle': {'col_1': '2.74', 'odds_1': '2.61', 'col_2': '1.52', 'odds_2': '1.55'}}],
-            # 'Strycova - A.Riske': [{'veikkaus': {'odds_1': '2,25', 'odds_2': '1,58'}}, {'time': '08 Jan 2020, 02:00'},
-            #                        {'bet365': {'col_1': '2.25', 'odds_1': '2.10', 'col_2': '1.57', 'odds_2': '1.66'}},
-            #                        {'William Hill': {'col_1': '2.30', 'odds_1': '2.10', 'col_2': '1.62', 'odds_2': '1.73'}},
-            #                        {'1xBet': {'col_1': '2.32', 'odds_1': '1.73', 'col_2': '1.59', 'odds_2': '2.12'}},
-            #                        {'Pinnacle': {'col_1': '2.39', 'odds_1': '1.93', 'col_2': '1.65', 'odds_2': '1.95'}}],
+    #     data_dict = {
+            # 'E.Bouchard - C.Garcia': [{'veikkaus': {'odds_1': '- ', 'odds_2': '1,45'}}, {'time': '99 Jan'},
+            #                           {'bet365': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.50', 'odds_2': '1.50'}},
+            #                           {'William Hill': {'col_1': '2.38', 'odds_1': '2.60', 'col_2': '1.57', 'odds_2': '1.50'}},
+            #                           {'1xBet': {'col_1': '2.58', 'odds_1': '2.69', 'col_2': '1.49', 'odds_2': '1.47'}},
+            #                           {'Pinnacle': {'col_1': '2.74', 'odds_1': '2.61', 'col_2': '1.52', 'odds_2': '1.55'}}],
+            # 'Strycova - A.Riske': [{'veikkaus': {'odds_1': '20,25', 'odds_2': '10,58'}}, {'time': '12 Jan 2020, 10:00'},
+            #                        {'bet365': {'col_1': '20.25', 'odds_1': '2.10', 'col_2': '100.57', 'odds_2': '10.66'}},
+            #                        {'William Hill': {'col_1': '20.30', 'odds_1': '2.10', 'col_2': '100.62', 'odds_2': '10.73'}},
+            #                        {'1xBet': {'col_1': '20.32', 'odds_1': '1.73', 'col_2': '100.59', 'odds_2': '20.12'}},
+            #                        {'Pinnacle': {'col_1': '20.39', 'odds_1': '1.93', 'col_2': '100.65', 'odds_2': '10.95'}}],
             # 'S.Rogers - G.Muguruza': [{'veikkaus': {'odds_1': '2,75', 'odds_2': '1,40'}}, {'time': '08 Jan 2020, 04:00'},
             #                           {'bet365': {'col_1': '2.75', 'odds_1': '2.75', 'col_2': '1.40', 'odds_2': '1.40'}},
             #                           {'William Hill': {'col_1': '2.75', 'odds_1': '2.75', 'col_2': '1.44', 'odds_2': '1.44'}},
@@ -79,12 +80,12 @@ if __name__ == "__main__":
             #                                                   'odds_2': '1.80'}},
             #                              {'1xBet': {'col_1': '1.90', 'odds_1': '1.87', 'col_2': '1.83', 'odds_2': '1.95'}},
             #                              {'Pinnacle': {'col_1': '2.09', 'odds_1': '2.06', 'col_2': '1.83', 'odds_2': '1.83'}}],
-            'Bautista-Agut - Soeda': [{'veikkaus': {'odds_1': '1,07', 'odds_2': '6,60'}}],
-            'D.Thiem - H.Hurkacz': [{'veikkaus': {'odds_1': '1,60', 'odds_2': '2,20'}}, {'time': '08 Jan 2020, 01:50'},
-                                    {'bet365': {'col_1': '1.57', 'odds_1': '1.50', 'col_2': '2.25', 'odds_2': '2.50'}},
-                                    {'William Hill': {'col_1': '1.62', 'odds_1': '1.50', 'col_2': '2.30', 'odds_2': '2.60'}},
-                                    {'1xBet': {'col_1': '1.71', 'odds_1': '1.57', 'col_2': '2.21', 'odds_2': '2.49'}},
-                                    {'Pinnacle': {'col_1': '1.71', 'odds_1': '1.53', 'col_2': '2.25', 'odds_2': '2.64'}}],
+            # 'Bautista-Agut - Soeda': [{'veikkaus': {'odds_1': '1,07', 'odds_2': '6,60'}}],
+            # 'D.Thiem - H.Hurkacz': [{'veikkaus': {'odds_1': '1,60', 'odds_2': '2,20'}}, {'time': '12 Jan 2020, 7:50'},
+            #                         {'bet365': {'col_1': '1.57', 'odds_1': '1.50', 'col_2': '2.25', 'odds_2': '2.50'}},
+            #                         {'William Hill': {'col_1': '1.62', 'odds_1': '1.50', 'col_2': '2.30', 'odds_2': '2.60'}},
+            #                         {'1xBet': {'col_1': '1.71', 'odds_1': '1.57', 'col_2': '2.21', 'odds_2': '2.49'}},
+            #                         {'Pinnacle': {'col_1': '1.71', 'odds_1': '1.53', 'col_2': '2.25', 'odds_2': '2.64'}}],
             # 'S.Kenin - N.Osaka': [{'veikkaus': {'odds_1': '2,30', 'odds_2': '1,55'}}, {'time': '09 Jan 2020, 02:00'},
             #                       {'bet365': {'col_1': '2.37', 'odds_1': '2.62', 'col_2': '1.53', 'odds_2': '1.44'}},
             #                       {'William Hill': {'col_1': '2.30', 'odds_1': '2.75', 'col_2': '1.62', 'odds_2': '1.44'}},
@@ -106,21 +107,23 @@ if __name__ == "__main__":
             #                           {'William Hill': {'col_1': '1.29', 'odds_1': '1.29', 'col_2': '3.60', 'odds_2': '3.60'}},
             #                           {'1xBet': {'col_1': '1.29', 'odds_1': '1.30', 'col_2': '3.56', 'odds_2': '3.70'}},
             #                           {'Pinnacle': {'col_1': '1.34', 'odds_1': '1.32', 'col_2': '3.63', 'odds_2': '3.78'}}],
-            'C.Wozniacki - L.Davis': [{'veikkaus': {'odds_1': '1,34', 'odds_2': '3,00'}}, {'time': '09 Jan 2020, 00:00'},
-                                      {'bet365': {'col_1': '1.36', 'odds_1': '1.44', 'col_2': '3.00', 'odds_2': '2.62'}},
-                                      {'William Hill': {'col_1': '1.36', 'odds_1': '1.44', 'col_2': '3.10', 'odds_2': '2.75'}},
-                                      {'1xBet': {'col_1': '1.41', 'odds_1': '1.47', 'col_2': '3.03', 'odds_2': '2.69'}},
-                                      {'Pinnacle': {'col_1': '1.41', 'odds_1': '1.42', 'col_2': '3.14', 'odds_2': '3.06'}}],
-            'ATP  Australian Open': [{'veikkaus': {'odds_1': ' - ', 'odds_2': ' - '}},
-                                     {'Pinnacle': {'col_1': '1.71', 'odds_1': '1.53', 'col_2': '2.25', 'odds_2': '2.64'}}],
-            'WTA  Australian Open': [{'veikkaus': {'odds_1': '100500', 'odds_2': ' - '}}, {'time': '09 Jan 2020, 00:00'}]}
+            # 'C.Wozniacki - L.Davis': [{'veikkaus': {'odds_1': '1,34', 'odds_2': '3,00'}}, {'time': '12 Jan 2020, 17:00'},
+            #                           {'bet365': {'col_1': '10.36', 'odds_1': '1.44', 'col_2': '30.00', 'odds_2': '20.62'}},
+            #                           {'William Hill': {'col_1': '10.36', 'odds_1': '1.44', 'col_2': '30.10', 'odds_2': '20.75'}},
+            #                           {'1xBet': {'col_1': '10.41', 'odds_1': '1.47', 'col_2': '30.03', 'odds_2': '20.69'}},
+            #                           {'Pinnacle': {'col_1': '10.41', 'odds_1': '1.42', 'col_2': '30.14', 'odds_2': '30.06'}}],
+            # 'ATP  Australian Open': [{'veikkaus': {'odds_1': ' - ', 'odds_2': ' - '}}],
+            # 'WTA  Australian Open': [{'veikkaus': {'odds_1': ' - ', 'odds_2': ' - '}}]}
         print('Creating excel file')
         update_xlsl_file(data_dict)
         print('Parsing is finished')
-    except Exception as e:
-        print(e)
+    except Exception as inst:
+        print(type(inst))  # экземпляр исключения
+        print(inst.args)  # аргументы хранимые в .args
+        print(inst)
+        print(sys.exc_info())
     finally:
-        # driver.close()
+        driver.close()
         # vdisplay.stop()
         quit()
 
