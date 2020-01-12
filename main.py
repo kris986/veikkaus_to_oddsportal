@@ -14,6 +14,8 @@ from post_to_xlsx import update_xlsl_file
 
 veikkaus_base = VeikkausBase()
 oddssportal_base = OddsportalBase()
+
+
 # vdisplay = Xvfb()
 
 # version for Linux
@@ -48,266 +50,63 @@ if __name__ == "__main__":
     # vdisplay.start()
     veikkaus_url = 'https://www.veikkaus.fi/fi/pitkaveto?sportId=10&selectedLeagues=10-all'
     oddsportal_url = "https://www.oddsportal.com"
-    driver = run_driver()
+    # driver = run_driver()
     try:
-        go_to_url(driver, veikkaus_url)
-        print('Started collect data on veikkaus...')
-        data_dict = veikkaus_base.collect_tennis_data(driver)
-        print('Ended collect data on veikkaus')
-        go_to_url(driver, oddsportal_url)
-        print('Started collect data on oddsportal...')
-        data_dict = oddssportal_base.collect_data_by_dict(driver, data_dict)
-    #     print('Ended collect data on oddsportal')
-    #     data_dict = {
-            # 'E.Bouchard - C.Garcia': [{'veikkaus': {'odds_1': '- ', 'odds_2': '1,45'}}, {'time': '99 Jan'},
-            #                           {'bet365': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.50', 'odds_2': '1.50'}},
-            #                           {'William Hill': {'col_1': '2.38', 'odds_1': '2.60', 'col_2': '1.57', 'odds_2': '1.50'}},
-            #                           {'1xBet': {'col_1': '2.58', 'odds_1': '2.69', 'col_2': '1.49', 'odds_2': '1.47'}},
-            #                           {'Pinnacle': {'col_1': '2.74', 'odds_1': '2.61', 'col_2': '1.52', 'odds_2': '1.55'}}],
-            # 'Strycova - A.Riske': [{'veikkaus': {'odds_1': '20,25', 'odds_2': '10,58'}}, {'time': '12 Jan 2020, 10:00'},
-            #                        {'bet365': {'col_1': '20.25', 'odds_1': '2.10', 'col_2': '100.57', 'odds_2': '10.66'}},
-            #                        {'William Hill': {'col_1': '20.30', 'odds_1': '2.10', 'col_2': '100.62', 'odds_2': '10.73'}},
-            #                        {'1xBet': {'col_1': '20.32', 'odds_1': '1.73', 'col_2': '100.59', 'odds_2': '20.12'}},
-            #                        {'Pinnacle': {'col_1': '20.39', 'odds_1': '1.93', 'col_2': '100.65', 'odds_2': '10.95'}}],
-            # 'S.Rogers - G.Muguruza': [{'veikkaus': {'odds_1': '2,75', 'odds_2': '1,40'}}, {'time': '08 Jan 2020, 04:00'},
-            #                           {'bet365': {'col_1': '2.75', 'odds_1': '2.75', 'col_2': '1.40', 'odds_2': '1.40'}},
-            #                           {'William Hill': {'col_1': '2.75', 'odds_1': '2.75', 'col_2': '1.44', 'odds_2': '1.44'}},
-            #                           {'1xBet': {'col_1': '2.82', 'odds_1': '2.76', 'col_2': '1.42', 'odds_2': '1.43'}},
-            #                           {'Pinnacle': {'col_1': '2.91', 'odds_1': '3.14', 'col_2': '1.47', 'odds_2': '1.41'}}],
-            # 'D.Collins - Y.Putintseva': [{'veikkaus': {'odds_1': '1,98', 'odds_2': '1,75'}}, {'time': '08 Jan 2020, 03:30'},
-            #                              {'bet365': {'col_1': '1.90', 'odds_1': '2.00', 'col_2': '1.80', 'odds_2': '1.72'}}, {
-            #                                  'William Hill': {'col_1': '2.00', 'odds_1': '2.00', 'col_2': '1.80',
-            #                                                   'odds_2': '1.80'}},
-            #                              {'1xBet': {'col_1': '1.90', 'odds_1': '1.87', 'col_2': '1.83', 'odds_2': '1.95'}},
-            #                              {'Pinnacle': {'col_1': '2.09', 'odds_1': '2.06', 'col_2': '1.83', 'odds_2': '1.83'}}],
-            # 'Bautista-Agut - Soeda': [{'veikkaus': {'odds_1': '1,07', 'odds_2': '6,60'}}],
-            # 'D.Thiem - H.Hurkacz': [{'veikkaus': {'odds_1': '1,60', 'odds_2': '2,20'}}, {'time': '12 Jan 2020, 7:50'},
-            #                         {'bet365': {'col_1': '1.57', 'odds_1': '1.50', 'col_2': '2.25', 'odds_2': '2.50'}},
-            #                         {'William Hill': {'col_1': '1.62', 'odds_1': '1.50', 'col_2': '2.30', 'odds_2': '2.60'}},
-            #                         {'1xBet': {'col_1': '1.71', 'odds_1': '1.57', 'col_2': '2.21', 'odds_2': '2.49'}},
-            #                         {'Pinnacle': {'col_1': '1.71', 'odds_1': '1.53', 'col_2': '2.25', 'odds_2': '2.64'}}],
-            # 'S.Kenin - N.Osaka': [{'veikkaus': {'odds_1': '2,30', 'odds_2': '1,55'}}, {'time': '09 Jan 2020, 02:00'},
-            #                       {'bet365': {'col_1': '2.37', 'odds_1': '2.62', 'col_2': '1.53', 'odds_2': '1.44'}},
-            #                       {'William Hill': {'col_1': '2.30', 'odds_1': '2.75', 'col_2': '1.62', 'odds_2': '1.44'}},
-            #                       {'1xBet': {'col_1': '2.35', 'odds_1': '2.38', 'col_2': '1.61', 'odds_2': '1.59'}},
-            #                       {'Pinnacle': {'col_1': '2.37', 'odds_1': '2.63', 'col_2': '1.65', 'odds_2': '1.54'}}],
-            # 'Bondarenko - Kr.Pliskova': [{'veikkaus': {'odds_1': '2,50', 'odds_2': '1,48'}}, {'time': '09 Jan 2020, 04:00'},
-            #                              {'bet365': {'col_1': '2.62', 'odds_1': '2.75', 'col_2': '1.50', 'odds_2': '1.44'}}, {
-            #                                  'William Hill': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.53',
-            #                                                   'odds_2': '1.53'}},
-            #                              {'1xBet': {'col_1': '2.56', 'odds_1': '2.31', 'col_2': '1.57', 'odds_2': '1.62'}},
-            #                              {'Pinnacle': {'col_1': '2.65', 'odds_1': '2.60', 'col_2': '1.55', 'odds_2': '1.56'}}],
-            # 'E.Rybakina - E.Mertens': [{'veikkaus': {'odds_1': '2,70', 'odds_2': '1,40'}}, {'time': '09 Jan 2020, 04:00'},
-            #                            {'bet365': {'col_1': '2.75', 'odds_1': '3.20', 'col_2': '1.44', 'odds_2': '1.36'}},
-            #                            {'William Hill': {'col_1': '2.75', 'odds_1': '3.10', 'col_2': '1.44', 'odds_2': '1.36'}},
-            #                            {'1xBet': {'col_1': '2.83', 'odds_1': '3.17', 'col_2': '1.48', 'odds_2': '1.38'}},
-            #                            {'Pinnacle': {'col_1': '2.86', 'odds_1': '3.21', 'col_2': '1.48', 'odds_2': '1.40'}}],
-            # 'S.Wawrinka - A.Bedene': [{'veikkaus': {'odds_1': '1,29', 'odds_2': '3,30'}}, {'time': '09 Jan 2020, 09:00'},
-            #                           {'bet365': {'col_1': '1.30', 'odds_1': '1.28', 'col_2': '3.50', 'odds_2': '3.75'}},
-            #                           {'William Hill': {'col_1': '1.29', 'odds_1': '1.29', 'col_2': '3.60', 'odds_2': '3.60'}},
-            #                           {'1xBet': {'col_1': '1.29', 'odds_1': '1.30', 'col_2': '3.56', 'odds_2': '3.70'}},
-            #                           {'Pinnacle': {'col_1': '1.34', 'odds_1': '1.32', 'col_2': '3.63', 'odds_2': '3.78'}}],
-            # 'C.Wozniacki - L.Davis': [{'veikkaus': {'odds_1': '1,34', 'odds_2': '3,00'}}, {'time': '12 Jan 2020, 17:00'},
-            #                           {'bet365': {'col_1': '10.36', 'odds_1': '1.44', 'col_2': '30.00', 'odds_2': '20.62'}},
-            #                           {'William Hill': {'col_1': '10.36', 'odds_1': '1.44', 'col_2': '30.10', 'odds_2': '20.75'}},
-            #                           {'1xBet': {'col_1': '10.41', 'odds_1': '1.47', 'col_2': '30.03', 'odds_2': '20.69'}},
-            #                           {'Pinnacle': {'col_1': '10.41', 'odds_1': '1.42', 'col_2': '30.14', 'odds_2': '30.06'}}],
-            # 'ATP  Australian Open': [{'veikkaus': {'odds_1': ' - ', 'odds_2': ' - '}}],
-            # 'WTA  Australian Open': [{'veikkaus': {'odds_1': ' - ', 'odds_2': ' - '}}]}
+        # go_to_url(driver, veikkaus_url)
+        # print('Started collect data on veikkaus...')
+        # data_dict = veikkaus_base.collect_tennis_data(driver)
+        # print('Ended collect data on veikkaus')
+        # go_to_url(driver, oddsportal_url)
+        # print('Started collect data on oddsportal...')
+        # data_dict = oddssportal_base.collect_data_by_dict(driver, data_dict)
+        # print('Ended collect data on oddsportal')
+        data_dict = {
+            'L.Sonego - H.Hurkacz': [{'veikkaus': {'odds_1': '69', 'odds_2': '1,22'}}, {'time': '13 Jan 2020, 09:00'},
+                                     {'bet365': {'col_1': '4.00', 'odds_1': '69', 'col_2': '1.22', 'odds_2': '1.25'}},
+                                     {'William Hill': {'col_1': '4.20', 'odds_1': '3.40', 'col_2': '1.22',
+                                                       'odds_2': '1.25'}},
+                                     {'1xBet': {'col_1': '4.34', 'odds_1': '100500', 'col_2': '100500', 'odds_2': '100'}},
+                                     {'Pinnacle': {'col_1': '4.45', 'odds_1': '100500', 'col_2': '600',
+                                                   'odds_2': '1.28'}}],
+            'Pavlyuchenkova - A.Kontaveit': [{'veikkaus': {'odds_1': '2,50', 'odds_2': '1,45'}},
+                                             {'time': '13 Jan 2020, 00:30'}, {
+                                                 'bet365': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.50',
+                                                            'odds_2': '1.50'}}, {
+                                                 'William Hill': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.53',
+                                                                  'odds_2': '1.53'}}, {
+                                                 '1xBet': {'col_1': '2.59', 'odds_1': '2.42', 'col_2': '1.53',
+                                                           'odds_2': '1.57'}}, {
+                                                 'Pinnacle': {'col_1': '2.61', 'odds_1': '2.50', 'col_2': '1.54',
+                                                              'odds_2': '1.58'}}],
+            'F.Ferro - R.Peterson': [{'veikkaus': {'odds_1': '2,95', 'odds_2': '1,35'}}, {'time': '13 Jan 2020, 03:30'},
+                                     {'bet365': {'col_1': '3.00', 'odds_1': '3.00', 'col_2': '1.36', 'odds_2': '1.36'}},
+                                     {'William Hill': {'col_1': '2.90', 'odds_1': '3.10', 'col_2': '1.40',
+                                                       'odds_2': '1.36'}},
+                                     {'1xBet': {'col_1': '3.01', 'odds_1': '3.01', 'col_2': '1.37', 'odds_2': '1.37'}},
+                                     {'Pinnacle': {'col_1': '3.19', 'odds_1': '3.19', 'col_2': '1.39',
+                                                   'odds_2': '1.39'}}],
+
+            'D.Yastremska - T.Babos': [{'veikkaus': {'odds_1': '1,28', 'odds_2': '3,35'}},
+                                       {'time': '13 Jan 2020, 06:00'}, {
+                                           'bet365': {'col_1': '1.30', 'odds_1': '1.33', 'col_2': '3.40',
+                                                      'odds_2': '3.25'}}, {
+                                           'William Hill': {'col_1': '1.33', 'odds_1': '1.33', 'col_2': '3.30',
+                                                            'odds_2': '3.30'}}, {
+                                           '1xBet': {'col_1': '1.31', 'odds_1': '1.38', 'col_2': '3.60',
+                                                     'odds_2': '3.07'}}, {
+                                           'Pinnacle': {'col_1': '1.32', 'odds_1': '1.36', 'col_2': '3.66',
+                                                        'odds_2': '3.37'}}],
+            'Zhu Lin - V.Kuzmova': [{'veikkaus': {'odds_1': '1,53', 'odds_2': '2,35'}}],
+
+            'WTA  Australian Open': [{'veikkaus': {'odds_1': ' - ', 'odds_2': ' - '}}]}
         print('Creating excel file')
         update_xlsl_file(data_dict)
         print('Parsing is finished')
     except Exception as inst:
-        print(type(inst))  # экземпляр исключения
-        print(inst.args)  # аргументы хранимые в .args
-        print(inst)
         print(sys.exc_info())
     finally:
-        driver.close()
+        # driver.close()
         # vdisplay.stop()
         quit()
 
-# data_dict = {
-#     'E.Bouchard - C.Garcia': [{'veikkaus': {'odds_1': '2,50', 'odds_2': '1,45'}}, {'time': '08 Jan 2020, 01:50'},
-#                               {'bet365': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.50', 'odds_2': '1.50'}},
-#                               {'William Hill': {'col_1': '2.38', 'odds_1': '2.60', 'col_2': '1.57', 'odds_2': '1.50'}},
-#                               {'1xBet': {'col_1': '2.58', 'odds_1': '2.69', 'col_2': '1.49', 'odds_2': '1.47'}},
-#                               {'Pinnacle': {'col_1': '2.74', 'odds_1': '2.61', 'col_2': '1.52', 'odds_2': '1.55'}}],
-#     'Strycova - A.Riske': [{'veikkaus': {'odds_1': '2,25', 'odds_2': '1,58'}}, {'time': '08 Jan 2020, 02:00'},
-#                            {'bet365': {'col_1': '2.25', 'odds_1': '2.10', 'col_2': '1.57', 'odds_2': '1.66'}},
-#                            {'William Hill': {'col_1': '2.30', 'odds_1': '2.10', 'col_2': '1.62', 'odds_2': '1.73'}},
-#                            {'1xBet': {'col_1': '2.32', 'odds_1': '1.73', 'col_2': '1.59', 'odds_2': '2.12'}},
-#                            {'Pinnacle': {'col_1': '2.39', 'odds_1': '1.93', 'col_2': '1.65', 'odds_2': '1.95'}}],
-#     'S.Rogers - G.Muguruza': [{'veikkaus': {'odds_1': '2,75', 'odds_2': '1,40'}}, {'time': '08 Jan 2020, 04:00'},
-#                               {'bet365': {'col_1': '2.75', 'odds_1': '2.75', 'col_2': '1.40', 'odds_2': '1.40'}},
-#                               {'William Hill': {'col_1': '2.75', 'odds_1': '2.75', 'col_2': '1.44', 'odds_2': '1.44'}},
-#                               {'1xBet': {'col_1': '2.82', 'odds_1': '2.76', 'col_2': '1.42', 'odds_2': '1.43'}},
-#                               {'Pinnacle': {'col_1': '2.91', 'odds_1': '3.14', 'col_2': '1.47', 'odds_2': '1.41'}}],
-#     'D.Collins - Y.Putintseva': [{'veikkaus': {'odds_1': '1,98', 'odds_2': '1,75'}}, {'time': '08 Jan 2020, 03:30'},
-#                                  {'bet365': {'col_1': '1.90', 'odds_1': '2.00', 'col_2': '1.80', 'odds_2': '1.72'}}, {
-#                                      'William Hill': {'col_1': '2.00', 'odds_1': '2.00', 'col_2': '1.80',
-#                                                       'odds_2': '1.80'}},
-#                                  {'1xBet': {'col_1': '1.90', 'odds_1': '1.87', 'col_2': '1.83', 'odds_2': '1.95'}},
-#                                  {'Pinnacle': {'col_1': '2.09', 'odds_1': '2.06', 'col_2': '1.83', 'odds_2': '1.83'}}],
-#     'Bautista-Agut - Soeda': [{'veikkaus': {'odds_1': '1,07', 'odds_2': '6,60'}}],
-#     'D.Thiem - H.Hurkacz': [{'veikkaus': {'odds_1': '1,60', 'odds_2': '2,20'}}, {'time': '08 Jan 2020, 01:50'},
-#                             {'bet365': {'col_1': '1.57', 'odds_1': '1.50', 'col_2': '2.25', 'odds_2': '2.50'}},
-#                             {'William Hill': {'col_1': '1.62', 'odds_1': '1.50', 'col_2': '2.30', 'odds_2': '2.60'}},
-#                             {'1xBet': {'col_1': '1.71', 'odds_1': '1.57', 'col_2': '2.21', 'odds_2': '2.49'}},
-#                             {'Pinnacle': {'col_1': '1.71', 'odds_1': '1.53', 'col_2': '2.25', 'odds_2': '2.64'}}],
-#     'Djokovic - C.Garin': [{'veikkaus': {'odds_1': '1,01', 'odds_2': '10,50'}}],
-#     'A.Blinkova - Z.Diyas': [{'veikkaus': {'odds_1': '1,75', 'odds_2': '1,98'}}, {'time': '08 Jan 2020, 04:00'},
-#                              {'bet365': {'col_1': '1.80', 'odds_1': '1.57', 'col_2': '1.90', 'odds_2': '2.25'}},
-#                              {'William Hill': {'col_1': '1.67', 'odds_1': '1.91', 'col_2': '2.20', 'odds_2': '1.91'}},
-#                              {'1xBet': {'col_1': '1.74', 'odds_1': '1.64', 'col_2': '2.03', 'odds_2': '2.28'}},
-#                              {'Pinnacle': {'col_1': '1.85', 'odds_1': '1.68', 'col_2': '2.06', 'odds_2': '2.30'}}],
-#     'R.Nadal - Y.Nishioka': [{'veikkaus': {'odds_1': '1,02', 'odds_2': '9,60'}}, {'time': '08 Jan 2020, 04:30'},
-#                              {'bet365': {'col_1': '1.01', 'odds_1': '1.01', 'col_2': '13.00', 'odds_2': '15.00'}},
-#                              {'William Hill': {'col_1': '1.02', 'odds_1': '1.02', 'col_2': '17.00', 'odds_2': '17.00'}},
-#                              {'1xBet': {'col_1': '1.01', 'odds_1': '1.01', 'col_2': '17.00', 'odds_2': '22.00'}},
-#                              {'Pinnacle': {'col_1': '1.01', 'odds_1': '1.01', 'col_2': '23.06', 'odds_2': '22.42'}}],
-#     'S.Stosur - M.Keys': [{'veikkaus': {'odds_1': '3,90', 'odds_2': '1,21'}}, {'time': '08 Jan 2020, 05:00'},
-#                           {'bet365': {'col_1': '4.00', 'odds_1': '4.33', 'col_2': '1.22', 'odds_2': '1.20'}},
-#                           {'William Hill': {'col_1': '4.00', 'odds_1': '4.00', 'col_2': '1.25', 'odds_2': '1.25'}},
-#                           {'1xBet': {'col_1': '3.78', 'odds_1': '3.84', 'col_2': '1.26', 'odds_2': '1.27'}},
-#                           {'Pinnacle': {'col_1': '4.33', 'odds_1': '4.43', 'col_2': '1.26', 'odds_2': '1.24'}}],
-#     'S.Peng - E.Alexandrova': [{'veikkaus': {'odds_1': '2,55', 'odds_2': '1,45'}}, {'time': '08 Jan 2020, 05:30'},
-#                                {'bet365': {'col_1': '2.62', 'odds_1': '2.62', 'col_2': '1.44', 'odds_2': '1.44'}},
-#                                {'William Hill': {'col_1': '2.60', 'odds_1': '2.60', 'col_2': '1.50', 'odds_2': '1.50'}},
-#                                {'1xBet': {'col_1': '2.69', 'odds_1': '3.07', 'col_2': '1.45', 'odds_2': '1.39'}},
-#                                {'Pinnacle': {'col_1': '2.78', 'odds_1': '2.70', 'col_2': '1.51', 'odds_2': '1.52'}}],
-#     'Wang Qiang - A.Sasnovich': [{'veikkaus': {'odds_1': '1,60', 'odds_2': '2,18'}}],
-#     'M.Cilic - G.Pella': [{'veikkaus': {'odds_1': '1,50', 'odds_2': '2,40'}}, {'time': '08 Jan 2020, 07:30'},
-#                           {'bet365': {'col_1': '1.53', 'odds_1': '1.30', 'col_2': '2.37', 'odds_2': '3.40'}},
-#                           {'William Hill': {'col_1': '1.44', 'odds_1': '1.40', 'col_2': '2.75', 'odds_2': '2.90'}},
-#                           {'1xBet': {'col_1': '1.59', 'odds_1': '1.47', 'col_2': '2.44', 'odds_2': '2.74'}},
-#                           {'Pinnacle': {'col_1': '1.60', 'odds_1': '1.38', 'col_2': '2.49', 'odds_2': '3.26'}}],
-#     'A.Anisimova - D.Kasatkina': [{'veikkaus': {'odds_1': '1,45', 'odds_2': '2,55'}}, {'time': '08 Jan 2020, 08:30'},
-#                                   {'bet365': {'col_1': '1.40', 'odds_1': '1.40', 'col_2': '2.75', 'odds_2': '2.75'}}, {
-#                                       'William Hill': {'col_1': '1.50', 'odds_1': '1.44', 'col_2': '2.60',
-#                                                        'odds_2': '2.75'}},
-#                                   {'1xBet': {'col_1': '1.45', 'odds_1': '1.46', 'col_2': '2.74', 'odds_2': '2.74'}},
-#                                   {'Pinnacle': {'col_1': '1.54', 'odds_1': '1.49', 'col_2': '2.66', 'odds_2': '2.79'}}],
-#     'B.Paire - L.Harris': [{'veikkaus': {'odds_1': '1,68', 'odds_2': '2,08'}}],
-#     'B.Coric - D.Schwartzman': [{'veikkaus': {'odds_1': '2,08', 'odds_2': '1,68'}}, {'time': '08 Jan 2020, 09:00'},
-#                                 {'bet365': {'col_1': '2.10', 'odds_1': '1.72', 'col_2': '1.66', 'odds_2': '2.00'}}, {
-#                                     'William Hill': {'col_1': '2.10', 'odds_1': '1.80', 'col_2': '1.73',
-#                                                      'odds_2': '2.00'}},
-#                                 {'1xBet': {'col_1': '2.17', 'odds_1': '1.74', 'col_2': '1.73', 'odds_2': '2.10'}},
-#                                 {'Pinnacle': {'col_1': '2.18', 'odds_1': '1.88', 'col_2': '1.74', 'odds_2': '2.00'}}],
-#     'G.Monfils - K.Anderson': [{'veikkaus': {'odds_1': '1,90', 'odds_2': '1,80'}}, {'time': '08 Jan 2020, 10:00'},
-#                                {'bet365': {'col_1': '1.90', 'odds_1': '1.90', 'col_2': '1.80', 'odds_2': '1.80'}},
-#                                {'William Hill': {'col_1': '1.91', 'odds_1': '1.91', 'col_2': '1.91', 'odds_2': '1.91'}},
-#                                {'1xBet': {'col_1': '1.99', 'odds_1': '1.83', 'col_2': '1.88', 'odds_2': '2.00'}},
-#                                {'Pinnacle': {'col_1': '2.00', 'odds_1': '1.84', 'col_2': '1.87', 'odds_2': '2.04'}}],
-#     'A.Metreveli - F.Roncadelli': [{'veikkaus': {'odds_1': '1,06', 'odds_2': '7,20'}}, {'time': '08 Jan 2020, 10:30'},
-#                                    {'bet365': {'col_1': '1.07', 'odds_1': '1.14', 'col_2': '7.50', 'odds_2': '5.00'}}, {
-#                                        'William Hill': {'col_1': '1.08', 'odds_1': '1.08', 'col_2': '7.50',
-#                                                         'odds_2': '7.50'}},
-#                                    {'1xBet': {'col_1': '1.06', 'odds_1': '1.31', 'col_2': '10.50', 'odds_2': '3.52'}}, {
-#                                        'Pinnacle': {'col_1': '1.08', 'odds_1': '1.79', 'col_2': '9.42',
-#                                                     'odds_2': '2.10'}}],
-#     'N.Basilashvili - P.Cuevas': [{'veikkaus': {'odds_1': '1,38', 'odds_2': '2,80'}}, {'time': '08 Jan 2020, 12:00'},
-#                                   {'bet365': {'col_1': '1.40', 'odds_1': '1.36', 'col_2': '2.75', 'odds_2': '3.00'}}, {
-#                                       'William Hill': {'col_1': '1.44', 'odds_1': '1.40', 'col_2': '2.75',
-#                                                        'odds_2': '2.90'}},
-#                                   {'1xBet': {'col_1': '1.47', 'odds_1': '1.41', 'col_2': '2.78', 'odds_2': '2.88'}},
-#                                   {'Pinnacle': {'col_1': '1.45', 'odds_1': '1.47', 'col_2': '2.88', 'odds_2': '2.83'}}],
-#     'P.Niklas-Salm. - P.Vives Marcos': [{'veikkaus': {'odds_1': '1,37', 'odds_2': '2,85'}}],
-#     'M.Kukushkin - A.Rublev': [{'veikkaus': {'odds_1': '3,55', 'odds_2': '1,25'}}, {'time': '08 Jan 2020, 13:30'},
-#                                {'bet365': {'col_1': '3.75', 'odds_1': '3.75', 'col_2': '1.25', 'odds_2': '1.25'}},
-#                                {'William Hill': {'col_1': '3.50', 'odds_1': '3.30', 'col_2': '1.30', 'odds_2': '1.33'}},
-#                                {'1xBet': {'col_1': '3.74', 'odds_1': '3.70', 'col_2': '1.30', 'odds_2': '1.26'}},
-#                                {'Pinnacle': {'col_1': '3.97', 'odds_1': '3.88', 'col_2': '1.29', 'odds_2': '1.30'}}],
-#     'Skupski/Skupsk - Kontinen/Skugo': [{'veikkaus': {'odds_1': '1,95', 'odds_2': '1,75'}}],
-#     'F.Verdasco - F.Krajinovic': [{'veikkaus': {'odds_1': '2,25', 'odds_2': '1,55'}}, {'time': '08 Jan 2020, 15:00'},
-#                                   {'bet365': {'col_1': '2.25', 'odds_1': '1.90', 'col_2': '1.57', 'odds_2': '1.80'}}, {
-#                                       'William Hill': {'col_1': '2.30', 'odds_1': '1.91', 'col_2': '1.62',
-#                                                        'odds_2': '1.91'}},
-#                                   {'1xBet': {'col_1': '2.32', 'odds_1': '1.90', 'col_2': '1.63', 'odds_2': '1.82'}},
-#                                   {'Pinnacle': {'col_1': '2.40', 'odds_1': '2.09', 'col_2': '1.63', 'odds_2': '1.81'}}],
-#     'M.Fucsovics - C.Ilkel': [{'veikkaus': {'odds_1': '1,16', 'odds_2': '4,60'}}, {'time': '08 Jan 2020, 15:00'},
-#                               {'bet365': {'col_1': '1.16', 'odds_1': '1.14', 'col_2': '5.00', 'odds_2': '5.50'}},
-#                               {'William Hill': {'col_1': '1.17', 'odds_1': '1.17', 'col_2': '5.00', 'odds_2': '5.00'}},
-#                               {'1xBet': {'col_1': '1.18', 'odds_1': '1.14', 'col_2': '4.92', 'odds_2': '5.55'}},
-#                               {'Pinnacle': {'col_1': '1.19', 'odds_1': '1.17', 'col_2': '5.39', 'odds_2': '5.65'}}],
-#     'L.Djere - PH.Herbert': [{'veikkaus': {'odds_1': '3,00', 'odds_2': '1,34'}}],
-#     'M.Kecmanovic - J-W.Tsonga': [{'veikkaus': {'odds_1': '2,65', 'odds_2': '1,43'}}, {'time': '08 Jan 2020, 16:30'},
-#                                   {'bet365': {'col_1': '2.62', 'odds_1': '3.00', 'col_2': '1.44', 'odds_2': '1.36'}}, {
-#                                       'William Hill': {'col_1': '2.60', 'odds_1': '2.75', 'col_2': '1.50',
-#                                                        'odds_2': '1.44'}},
-#                                   {'1xBet': {'col_1': '2.59', 'odds_1': '2.97', 'col_2': '1.53', 'odds_2': '1.38'}},
-#                                   {'Pinnacle': {'col_1': '2.66', 'odds_1': '3.02', 'col_2': '1.53', 'odds_2': '1.43'}}],
-#     'M.Raonic - C.Moutet': [{'veikkaus': {'odds_1': '1,28', 'odds_2': '3,35'}}, {'time': '08 Jan 2020, 18:00'},
-#                             {'bet365': {'col_1': '1.28', 'odds_1': '1.28', 'col_2': '3.50', 'odds_2': '3.50'}},
-#                             {'William Hill': {'col_1': '1.30', 'odds_1': '1.30', 'col_2': '3.50', 'odds_2': '3.50'}},
-#                             {'1xBet': {'col_1': '1.33', 'odds_1': '1.29', 'col_2': '3.40', 'odds_2': '3.50'}},
-#                             {'Pinnacle': {'col_1': '1.33', 'odds_1': '1.30', 'col_2': '3.59', 'odds_2': '3.82'}}],
-#     'C.Gauff - L.Siegemund': [{'veikkaus': {'odds_1': '1,45', 'odds_2': '2,60'}}, {'time': '09 Jan 2020, 00:00'},
-#                               {'bet365': {'col_1': '1.44', 'odds_1': '1.44', 'col_2': '2.62', 'odds_2': '2.62'}},
-#                               {'William Hill': {'col_1': '1.53', 'odds_1': '1.44', 'col_2': '2.50', 'odds_2': '2.75'}},
-#                               {'1xBet': {'col_1': '1.50', 'odds_1': '1.48', 'col_2': '2.65', 'odds_2': '2.69'}},
-#                               {'Pinnacle': {'col_1': '1.51', 'odds_1': '1.53', 'col_2': '2.74', 'odds_2': '2.65'}}],
-#     'J.Teichmann - J.Goerges': [{'veikkaus': {'odds_1': '3,20', 'odds_2': '1,30'}}, {'time': '09 Jan 2020, 00:00'},
-#                                 {'bet365': {'col_1': '3.00', 'odds_1': '2.37', 'col_2': '1.36', 'odds_2': '1.53'}}, {
-#                                     'William Hill': {'col_1': '3.30', 'odds_1': '2.90', 'col_2': '1.33',
-#                                                      'odds_2': '1.40'}},
-#                                 {'1xBet': {'col_1': '3.62', 'odds_1': '2.78', 'col_2': '1.30', 'odds_2': '1.44'}},
-#                                 {'Pinnacle': {'col_1': '3.56', 'odds_1': '2.64', 'col_2': '1.34', 'odds_2': '1.54'}}],
-#     'S.Williams - C.McHale': [{'veikkaus': {'odds_1': '1,10', 'odds_2': '5,80'}}, {'time': '09 Jan 2020, 00:00'},
-#                               {'bet365': {'col_1': '1.11', 'odds_1': '1.12', 'col_2': '6.50', 'odds_2': '6.00'}},
-#                               {'William Hill': {'col_1': '1.12', 'odds_1': '1.14', 'col_2': '6.00', 'odds_2': '5.50'}},
-#                               {'1xBet': {'col_1': '1.10', 'odds_1': '1.11', 'col_2': '7.70', 'odds_2': '6.80'}},
-#                               {'Pinnacle': {'col_1': '1.11', 'odds_1': '1.15', 'col_2': '7.78', 'odds_2': '6.13'}}],
-#     'E.Ruusuvuori - T.Daniel': [{'veikkaus': {'odds_1': '1,33', 'odds_2': '2,90'}}, {'time': '09 Jan 2020, 01:00'},
-#                                 {'bet365': {}}, {'William Hill': {'col_1': '1.44', 'odds_1': '1.44', 'col_2': '2.62',
-#                                                                   'odds_2': '2.62'}},
-#                                 {'1xBet': {'col_1': '1.45', 'odds_1': '1.51', 'col_2': '2.63', 'odds_2': '2.59'}},
-#                                 {'Pinnacle': {'col_1': '1.39', 'odds_1': '1.50', 'col_2': '3.01', 'odds_2': '2.59'}}],
-#     'A.Barty - J.Brady': [{'veikkaus': {'odds_1': '1,19', 'odds_2': '4,20'}}, {'time': '09 Jan 2020, 02:00'},
-#                           {'bet365': {'col_1': '1.18', 'odds_1': '1.18', 'col_2': '4.50', 'odds_2': '4.50'}},
-#                           {'William Hill': {'col_1': '1.20', 'odds_1': '1.20', 'col_2': '4.50', 'odds_2': '4.50'}},
-#                           {'1xBet': {'col_1': '1.23', 'odds_1': '1.24', 'col_2': '4.42', 'odds_2': '4.14'}},
-#                           {'Pinnacle': {'col_1': '1.22', 'odds_1': '1.23', 'col_2': '4.70', 'odds_2': '4.67'}}],
-#     'A.Tomljanovic - Ka.Pliskova': [{'veikkaus': {'odds_1': '3,90', 'odds_2': '1,21'}}],
-#     'K.Bertens - A.Kontaveit': [{'veikkaus': {'odds_1': '1,73', 'odds_2': '1,98'}}, {'time': '09 Jan 2020, 02:00'},
-#                                 {'bet365': {'col_1': '1.66', 'odds_1': '1.66', 'col_2': '2.10', 'odds_2': '2.10'}}, {
-#                                     'William Hill': {'col_1': '1.80', 'odds_1': '1.67', 'col_2': '2.00',
-#                                                      'odds_2': '2.20'}},
-#                                 {'1xBet': {'col_1': '1.83', 'odds_1': '1.62', 'col_2': '2.03', 'odds_2': '2.30'}},
-#                                 {'Pinnacle': {'col_1': '1.86', 'odds_1': '1.76', 'col_2': '2.04', 'odds_2': '2.16'}}],
-#     'L.Samsonova - P.Kvitova': [{'veikkaus': {'odds_1': '4,40', 'odds_2': '1,17'}}, {'time': '09 Jan 2020, 02:00'},
-#                                 {'bet365': {'col_1': '5.00', 'odds_1': '5.00', 'col_2': '1.16', 'odds_2': '1.16'}}, {
-#                                     'William Hill': {'col_1': '4.50', 'odds_1': '4.50', 'col_2': '1.20',
-#                                                      'odds_2': '1.20'}},
-#                                 {'1xBet': {'col_1': '4.84', 'odds_1': '4.92', 'col_2': '1.20', 'odds_2': '1.18'}},
-#                                 {'Pinnacle': {'col_1': '4.94', 'odds_1': '5.00', 'col_2': '1.21', 'odds_2': '1.21'}}],
-#     'S.Kenin - N.Osaka': [{'veikkaus': {'odds_1': '2,30', 'odds_2': '1,55'}}, {'time': '09 Jan 2020, 02:00'},
-#                           {'bet365': {'col_1': '2.37', 'odds_1': '2.62', 'col_2': '1.53', 'odds_2': '1.44'}},
-#                           {'William Hill': {'col_1': '2.30', 'odds_1': '2.75', 'col_2': '1.62', 'odds_2': '1.44'}},
-#                           {'1xBet': {'col_1': '2.35', 'odds_1': '2.38', 'col_2': '1.61', 'odds_2': '1.59'}},
-#                           {'Pinnacle': {'col_1': '2.37', 'odds_1': '2.63', 'col_2': '1.65', 'odds_2': '1.54'}}],
-#     'Bondarenko - Kr.Pliskova': [{'veikkaus': {'odds_1': '2,50', 'odds_2': '1,48'}}, {'time': '09 Jan 2020, 04:00'},
-#                                  {'bet365': {'col_1': '2.62', 'odds_1': '2.75', 'col_2': '1.50', 'odds_2': '1.44'}}, {
-#                                      'William Hill': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.53',
-#                                                       'odds_2': '1.53'}},
-#                                  {'1xBet': {'col_1': '2.56', 'odds_1': '2.31', 'col_2': '1.57', 'odds_2': '1.62'}},
-#                                  {'Pinnacle': {'col_1': '2.65', 'odds_1': '2.60', 'col_2': '1.55', 'odds_2': '1.56'}}],
-#     'E.Rybakina - E.Mertens': [{'veikkaus': {'odds_1': '2,70', 'odds_2': '1,40'}}, {'time': '09 Jan 2020, 04:00'},
-#                                {'bet365': {'col_1': '2.75', 'odds_1': '3.20', 'col_2': '1.44', 'odds_2': '1.36'}},
-#                                {'William Hill': {'col_1': '2.75', 'odds_1': '3.10', 'col_2': '1.44', 'odds_2': '1.36'}},
-#                                {'1xBet': {'col_1': '2.83', 'odds_1': '3.17', 'col_2': '1.48', 'odds_2': '1.38'}},
-#                                {'Pinnacle': {'col_1': '2.86', 'odds_1': '3.21', 'col_2': '1.48', 'odds_2': '1.40'}}],
-#     'S.Wawrinka - A.Bedene': [{'veikkaus': {'odds_1': '1,29', 'odds_2': '3,30'}}, {'time': '09 Jan 2020, 09:00'},
-#                               {'bet365': {'col_1': '1.30', 'odds_1': '1.28', 'col_2': '3.50', 'odds_2': '3.75'}},
-#                               {'William Hill': {'col_1': '1.29', 'odds_1': '1.29', 'col_2': '3.60', 'odds_2': '3.60'}},
-#                               {'1xBet': {'col_1': '1.29', 'odds_1': '1.30', 'col_2': '3.56', 'odds_2': '3.70'}},
-#                               {'Pinnacle': {'col_1': '1.34', 'odds_1': '1.32', 'col_2': '3.63', 'odds_2': '3.78'}}],
-#     'C.Wozniacki - L.Davis': [{'veikkaus': {'odds_1': '1,34', 'odds_2': '3,00'}}, {'time': '09 Jan 2020, 00:00'},
-#                               {'bet365': {'col_1': '1.36', 'odds_1': '1.44', 'col_2': '3.00', 'odds_2': '2.62'}},
-#                               {'William Hill': {'col_1': '1.36', 'odds_1': '1.44', 'col_2': '3.10', 'odds_2': '2.75'}},
-#                               {'1xBet': {'col_1': '1.41', 'odds_1': '1.47', 'col_2': '3.03', 'odds_2': '2.69'}},
-#                               {'Pinnacle': {'col_1': '1.41', 'odds_1': '1.42', 'col_2': '3.14', 'odds_2': '3.06'}}],
-#     'ATP  Australian Open': [{'veikkaus': {'odds_1': ' - ', 'odds_2': ' - '}}],
-#     'WTA  Australian Open': [{'veikkaus': {'odds_1': ' - ', 'odds_2': ' - '}}]}
-
+# dict = {'L.Sonego - H.Hurkacz': [{'veikkaus': {'odds_1': '3,85', 'odds_2': '1,22'}}, {'time': '13 Jan 2020, 00:00'}, {'bet365': {'col_1': '4.00', 'odds_1': '3.75', 'col_2': '1.22', 'odds_2': '1.25'}}, {'William Hill': {'col_1': '4.20', 'odds_1': '3.40', 'col_2': '1.22', 'odds_2': '1.25'}}, {'1xBet': {'col_1': '4.34', 'odds_1': '3.58', 'col_2': '1.24', 'odds_2': '1.28'}}, {'Pinnacle': {'col_1': '4.45', 'odds_1': '3.97', 'col_2': '1.24', 'odds_2': '1.28'}}], 'Pavlyuchenkova - A.Kontaveit': [{'veikkaus': {'odds_1': '2,50', 'odds_2': '1,45'}}, {'time': '13 Jan 2020, 01:30'}, {'bet365': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.50', 'odds_2': '1.50'}}, {'William Hill': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.53', 'odds_2': '1.53'}}, {'1xBet': {'col_1': '2.59', 'odds_1': '2.42', 'col_2': '1.53', 'odds_2': '1.57'}}, {'Pinnacle': {'col_1': '2.61', 'odds_1': '2.50', 'col_2': '1.54', 'odds_2': '1.58'}}], 'F.Ferro - R.Peterson': [{'veikkaus': {'odds_1': '2,95', 'odds_2': '1,35'}}, {'time': '13 Jan 2020, 03:30'}, {'bet365': {'col_1': '3.00', 'odds_1': '3.00', 'col_2': '1.36', 'odds_2': '1.36'}}, {'William Hill': {'col_1': '2.90', 'odds_1': '3.10', 'col_2': '1.40', 'odds_2': '1.36'}}, {'1xBet': {'col_1': '3.01', 'odds_1': '3.01', 'col_2': '1.37', 'odds_2': '1.37'}}, {'Pinnacle': {'col_1': '3.19', 'odds_1': '3.19', 'col_2': '1.39', 'odds_2': '1.39'}}], 'A.Sharma - L.Davis': [{'veikkaus': {'odds_1': '2,90', 'odds_2': '1,36'}}, {'time': '13 Jan 2020, 02:00'}, {'bet365': {'col_1': '2.75', 'odds_1': '3.00', 'col_2': '1.40', 'odds_2': '1.36'}}, {'William Hill': {'col_1': '2.90', 'odds_1': '3.10', 'col_2': '1.40', 'odds_2': '1.36'}}, {'1xBet': {'col_1': '2.86', 'odds_1': '3.01', 'col_2': '1.41', 'odds_2': '1.37'}}, {'Pinnacle': {'col_1': '2.97', 'odds_1': '3.17', 'col_2': '1.43', 'odds_2': '1.39'}}], 'J.I.Londero - D.Evans': [{'veikkaus': {'odds_1': '3,85', 'odds_2': '1,22'}}, {'time': '13 Jan 2020, 03:00'}, {'bet365': {'col_1': '4.00', 'odds_1': '4.00', 'col_2': '1.22', 'odds_2': '1.22'}}, {'William Hill': {'col_1': '4.20', 'odds_1': '4.00', 'col_2': '1.22', 'odds_2': '1.25'}}, {'1xBet': {'col_1': '4.06', 'odds_1': '3.96', 'col_2': '1.26', 'odds_2': '1.23'}}, {'Pinnacle': {'col_1': '4.10', 'odds_1': '3.85', 'col_2': '1.27', 'odds_2': '1.29'}}], 'K.Kozlova - Sorribes Tormo': [{'veikkaus': {'odds_1': '1,73', 'odds_2': '2,00'}}], 'T.Sandgren - Venus': [{'veikkaus': {'odds_1': '1,09', 'odds_2': '6,00'}}, {'time': '13 Jan 2020, 01:30'}, {'bet365': {'col_1': '1.10', 'odds_1': '1.10', 'col_2': '7.00', 'odds_2': '7.00'}}, {'William Hill': {'col_1': '1.10', 'odds_1': '1.10', 'col_2': '7.00', 'odds_2': '7.00'}}, {'1xBet': {'col_1': '1.10', 'odds_1': '1.10', 'col_2': '6.40', 'odds_2': '6.70'}}, {'Pinnacle': {'col_1': '1.11', 'odds_1': '1.11', 'col_2': '7.40', 'odds_2': '7.35'}}], 'G.Simon - J.Chardy': [{'veikkaus': {'odds_1': '2,18', 'odds_2': '1,63'}}, {'time': '13 Jan 2020, 01:30'}, {'bet365': {'col_1': '2.37', 'odds_1': '2.25', 'col_2': '1.53', 'odds_2': '1.57'}}, {'William Hill': {'col_1': '2.50', 'odds_1': '2.20', 'col_2': '1.53', 'odds_2': '1.67'}}, {'1xBet': {'col_1': '2.24', 'odds_1': '1.89', 'col_2': '1.63', 'odds_2': '1.92'}}, {'Pinnacle': {'col_1': '2.22', 'odds_1': '2.38', 'col_2': '1.71', 'odds_2': '1.63'}}], 'A.Sevastova - D.Vekic': [{'veikkaus': {'odds_1': '1,93', 'odds_2': '1,78'}}, {'time': '13 Jan 2020, 01:30'}, {'bet365': {'col_1': '1.90', 'odds_1': '1.90', 'col_2': '1.80', 'odds_2': '1.80'}}, {'William Hill': {'col_1': '1.91', 'odds_1': '2.00', 'col_2': '1.91', 'odds_2': '1.80'}}, {'1xBet': {'col_1': '1.90', 'odds_1': '1.86', 'col_2': '1.82', 'odds_2': '1.97'}}, {'Pinnacle': {'col_1': '2.03', 'odds_1': '1.93', 'col_2': '1.85', 'odds_2': '1.93'}}], 'Y.Putintseva - A.Tomljanovic': [{'veikkaus': {'odds_1': '1,55', 'odds_2': '2,30'}}, {'time': '13 Jan 2020, 01:30'}, {'bet365': {'col_1': '1.57', 'odds_1': '1.57', 'col_2': '2.25', 'odds_2': '2.25'}}, {'William Hill': {'col_1': '1.57', 'odds_1': '1.57', 'col_2': '2.38', 'odds_2': '2.38'}}, {'1xBet': {'col_1': '1.63', 'odds_1': '1.82', 'col_2': '2.35', 'odds_2': '2.01'}}, {'Pinnacle': {'col_1': '1.62', 'odds_1': '1.57', 'col_2': '2.41', 'odds_2': '2.52'}}], 'J.Teichmann - H.Watson': [{'veikkaus': {'odds_1': '2,55', 'odds_2': '1,45'}}, {'time': '13 Jan 2020, 02:30'}, {'bet365': {'col_1': '2.37', 'odds_1': '2.50', 'col_2': '1.53', 'odds_2': '1.50'}}, {'William Hill': {'col_1': '2.38', 'odds_1': '2.60', 'col_2': '1.57', 'odds_2': '1.50'}}, {'1xBet': {'col_1': '2.52', 'odds_1': '2.49', 'col_2': '1.51', 'odds_2': '1.51'}}, {'Pinnacle': {'col_1': '2.67', 'odds_1': '2.53', 'col_2': '1.52', 'odds_2': '1.57'}}], 'C.Norrie - T.Monteiro': [{'veikkaus': {'odds_1': '1,48', 'odds_2': '2,50'}}, {'time': '13 Jan 2020, 03:00'}, {'bet365': {'col_1': '1.50', 'odds_1': '1.50', 'col_2': '2.50', 'odds_2': '2.50'}}, {'William Hill': {'col_1': '1.50', 'odds_1': '1.50', 'col_2': '2.60', 'odds_2': '2.60'}}, {'1xBet': {'col_1': '1.50', 'odds_1': '1.57', 'col_2': '2.53', 'odds_2': '2.41'}}, {'Pinnacle': {'col_1': '1.54', 'odds_1': '1.51', 'col_2': '2.60', 'odds_2': '2.69'}}], 'D.Collins - A.Sasnovich': [{'veikkaus': {'odds_1': '1,70', 'odds_2': '2,05'}}, {'time': '13 Jan 2020, 03:00'}, {'bet365': {'col_1': '1.61', 'odds_1': '1.61', 'col_2': '2.20', 'odds_2': '2.20'}}, {'William Hill': {'col_1': '1.73', 'odds_1': '1.62', 'col_2': '2.10', 'odds_2': '2.30'}}, {'1xBet': {'col_1': '1.77', 'odds_1': '1.61', 'col_2': '2.12', 'odds_2': '2.33'}}, {'Pinnacle': {'col_1': '1.76', 'odds_1': '1.78', 'col_2': '2.15', 'odds_2': '2.12'}}], 'B.Bencic - D.Kasatkina': [{'veikkaus': {'odds_1': '1,37', 'odds_2': '2,85'}}, {'time': '13 Jan 2020, 03:00'}, {'bet365': {'col_1': '1.44', 'odds_1': '1.44', 'col_2': '2.62', 'odds_2': '2.62'}}, {'William Hill': {'col_1': '1.44', 'odds_1': '1.44', 'col_2': '2.75', 'odds_2': '2.75'}}, {'1xBet': {'col_1': '1.49', 'odds_1': '1.62', 'col_2': '2.73', 'odds_2': '2.31'}}, {'Pinnacle': {'col_1': '1.44', 'odds_1': '1.53', 'col_2': '2.95', 'odds_2': '2.62'}}], 'U.Humbert - Ca.Ruud': [{'veikkaus': {'odds_1': '1,95', 'odds_2': '1,78'}}], 'L.Harris - C.Garin': [{'veikkaus': {'odds_1': '1,80', 'odds_2': '1,90'}}], 'S.Querrey - G.Barrere': [{'veikkaus': {'odds_1': '1,43', 'odds_2': '2,65'}}, {'time': '13 Jan 2020, 04:30'}, {'bet365': {'col_1': '1.44', 'odds_1': '1.50', 'col_2': '2.62', 'odds_2': '2.50'}}, {'William Hill': {'col_1': '1.50', 'odds_1': '1.50', 'col_2': '2.60', 'odds_2': '2.60'}}, {'1xBet': {'col_1': '1.49', 'odds_1': '1.38', 'col_2': '2.57', 'odds_2': '3.07'}}, {'Pinnacle': {'col_1': '1.56', 'odds_1': '1.45', 'col_2': '2.56', 'odds_2': '2.91'}}], 'M.Linette - S.Kuznetsova': [{'veikkaus': {'odds_1': '1,65', 'odds_2': '2,13'}}, {'time': '13 Jan 2020, 05:00'}, {'bet365': {'col_1': '1.66', 'odds_1': '1.80', 'col_2': '2.10', 'odds_2': '1.90'}}, {'William Hill': {'col_1': '1.67', 'odds_1': '1.91', 'col_2': '2.20', 'odds_2': '1.91'}}, {'1xBet': {'col_1': '1.72', 'odds_1': '1.88', 'col_2': '2.08', 'odds_2': '1.89'}}, {'Pinnacle': {'col_1': '1.85', 'odds_1': '1.93', 'col_2': '2.02', 'odds_2': '1.93'}}], 'V.Golubic - S.Kenin': [{'veikkaus': {'odds_1': '4,10', 'odds_2': '1,20'}}, {'time': '13 Jan 2020, 04:30'}, {'bet365': {'col_1': '4.00', 'odds_1': '4.00', 'col_2': '1.22', 'odds_2': '1.22'}}, {'William Hill': {'col_1': '4.20', 'odds_1': '4.20', 'col_2': '1.22', 'odds_2': '1.22'}}, {'1xBet': {'col_1': '4.46', 'odds_1': '3.86', 'col_2': '1.23', 'odds_2': '1.28'}}, {'Pinnacle': {'col_1': '4.67', 'odds_1': '4.13', 'col_2': '1.22', 'odds_2': '1.26'}}], 'D.Yastremska - T.Babos': [{'veikkaus': {'odds_1': '1,28', 'odds_2': '3,35'}}, {'time': '13 Jan 2020, 06:00'}, {'bet365': {'col_1': '1.30', 'odds_1': '1.33', 'col_2': '3.40', 'odds_2': '3.25'}}, {'William Hill': {'col_1': '1.33', 'odds_1': '1.33', 'col_2': '3.30', 'odds_2': '3.30'}}, {'1xBet': {'col_1': '1.31', 'odds_1': '1.38', 'col_2': '3.60', 'odds_2': '3.07'}}, {'Pinnacle': {'col_1': '1.32', 'odds_1': '1.36', 'col_2': '3.66', 'odds_2': '3.37'}}], 'Zhu Lin - V.Kuzmova': [{'veikkaus': {'odds_1': '1,53', 'odds_2': '2,35'}}], 'J.Sinner - B.Paire': [{'veikkaus': {'odds_1': '1,68', 'odds_2': '2,08'}}, {'time': '13 Jan 2020, 07:00'}, {'bet365': {'col_1': '1.66', 'odds_1': '1.72', 'col_2': '2.10', 'odds_2': '2.00'}}, {'William Hill': {'col_1': '1.67', 'odds_1': '1.80', 'col_2': '2.20', 'odds_2': '2.00'}}, {'1xBet': {'col_1': '1.73', 'odds_1': '1.82', 'col_2': '2.07', 'odds_2': '1.96'}}, {'Pinnacle': {'col_1': '1.72', 'odds_1': '1.75', 'col_2': '2.20', 'odds_2': '2.16'}}], 'V.Kudermetova - S.Stosur': [{'veikkaus': {'odds_1': '1,40', 'odds_2': '2,70'}}, {'time': '13 Jan 2020, 08:00'}, {'bet365': {'col_1': '1.40', 'odds_1': '1.36', 'col_2': '2.75', 'odds_2': '3.00'}}, {'William Hill': {'col_1': '1.44', 'odds_1': '1.40', 'col_2': '2.75', 'odds_2': '2.90'}}, {'1xBet': {'col_1': '1.48', 'odds_1': '1.39', 'col_2': '2.59', 'odds_2': '2.92'}}, {'Pinnacle': {'col_1': '1.49', 'odds_1': '1.37', 'col_2': '2.77', 'odds_2': '3.27'}}], 'M.Ymer - F.Tiafoe': [{'veikkaus': {'odds_1': '2,40', 'odds_2': '1,53'}}, {'time': '13 Jan 2020, 08:30'}, {'bet365': {'col_1': '2.50', 'odds_1': '2.62', 'col_2': '1.50', 'odds_2': '1.44'}}, {'William Hill': {'col_1': '2.50', 'odds_1': '2.75', 'col_2': '1.53', 'odds_2': '1.44'}}, {'1xBet': {'col_1': '2.48', 'odds_1': '2.88', 'col_2': '1.52', 'odds_2': '1.42'}}, {'Pinnacle': {'col_1': '2.43', 'odds_1': '2.89', 'col_2': '1.61', 'odds_2': '1.45'}}], 'F.Delbonis - J.Duckworth': [{'veikkaus': {'odds_1': '1,95', 'odds_2': '1,75'}}, {'time': '13 Jan 2020, 09:00'}, {'bet365': {'col_1': '1.83', 'odds_1': '1.83', 'col_2': '1.83', 'odds_2': '1.83'}}, {'William Hill': {'col_1': '1.91', 'odds_1': '1.91', 'col_2': '1.91', 'odds_2': '1.91'}}, {'1xBet': {'col_1': '1.96', 'odds_1': '1.89', 'col_2': '1.82', 'odds_2': '1.92'}}, {'Pinnacle': {'col_1': '2.07', 'odds_1': '1.93', 'col_2': '1.81', 'odds_2': '1.93'}}], 'S.Cirstea - Kr.Pliskova': [{'veikkaus': {'odds_1': '2,00', 'odds_2': '1,70'}}, {'time': '13 Jan 2020, 09:30'}, {'bet365': {'col_1': '1.83', 'odds_1': '1.72', 'col_2': '1.83', 'odds_2': '2.00'}}, {'William Hill': {'col_1': '2.00', 'odds_1': '1.85', 'col_2': '1.80', 'odds_2': '1.95'}}, {'1xBet': {'col_1': '2.01', 'odds_1': '1.74', 'col_2': '1.79', 'odds_2': '1.99'}}, {'Pinnacle': {'col_1': '2.03', 'odds_1': '1.96', 'col_2': '1.85', 'odds_2': '1.91'}}], 'Wang Qiang - A.Kerber': [{'veikkaus': {'odds_1': '2,10', 'odds_2': '1,65'}}], 'A.Davidovich - K.Edmund': [{'veikkaus': {'odds_1': '2,95', 'odds_2': '1,35'}}, {'time': '14 Jan 2020, 01:00'}, {'bet365': {'col_1': '3.00', 'odds_1': '3.00', 'col_2': '1.36', 'odds_2': '1.36'}}, {'William Hill': {'col_1': '3.10', 'odds_1': '3.10', 'col_2': '1.36', 'odds_2': '1.36'}}, {'1xBet': {'col_1': '2.88', 'odds_1': '3.01', 'col_2': '1.40', 'odds_2': '1.37'}}, {'Pinnacle': {'col_1': '3.00', 'odds_1': '3.21', 'col_2': '1.43', 'odds_2': '1.38'}}], 'A.Mannarino - A.Seppi': [{'veikkaus': {'odds_1': '1,60', 'odds_2': '2,20'}}, {'time': '14 Jan 2020, 01:00'}, {'bet365': {'col_1': '1.57', 'odds_1': '1.57', 'col_2': '2.25', 'odds_2': '2.25'}}, {'William Hill': {'col_1': '1.62', 'odds_1': '1.62', 'col_2': '2.30', 'odds_2': '2.30'}}, {'1xBet': {'col_1': '1.64', 'odds_1': '1.61', 'col_2': '2.22', 'odds_2': '2.27'}}, {'Pinnacle': {'col_1': '1.68', 'odds_1': '1.57', 'col_2': '2.28', 'odds_2': '2.51'}}], 'F.Lopez - P.Andujar': [{'veikkaus': {'odds_1': '1,70', 'odds_2': '2,03'}}], 'J.Sousa - V.Pospisil': [{'veikkaus': {'odds_1': '2,50', 'odds_2': '1,45'}}, {'time': '14 Jan 2020, 01:00'}, {'bet365': {'col_1': '2.37', 'odds_1': '2.37', 'col_2': '1.53', 'odds_2': '1.53'}}, {'William Hill': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.53', 'odds_2': '1.53'}}, {'1xBet': {'col_1': '2.59', 'odds_1': '2.56', 'col_2': '1.48', 'odds_2': '1.49'}}, {'Pinnacle': {'col_1': '2.63', 'odds_1': '2.61', 'col_2': '1.53', 'odds_2': '1.54'}}], 'M.Mmoh - J.Millman': [{'veikkaus': {'odds_1': '2,40', 'odds_2': '1,50'}}, {'time': '14 Jan 2020, 01:00'}, {'bet365': {'col_1': '2.37', 'odds_1': '2.37', 'col_2': '1.53', 'odds_2': '1.53'}}, {'William Hill': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.53', 'odds_2': '1.53'}}, {'1xBet': {'col_1': '2.34', 'odds_1': '2.34', 'col_2': '1.58', 'odds_2': '1.58'}}, {'Pinnacle': {'col_1': '2.47', 'odds_1': '2.47', 'col_2': '1.59', 'odds_2': '1.59'}}], 'R.Albot - M.Cecchinato': [{'veikkaus': {'odds_1': '1,34', 'odds_2': '2,95'}}, {'time': '14 Jan 2020, 01:00'}, {'bet365': {'col_1': '1.40', 'odds_1': '1.40', 'col_2': '2.75', 'odds_2': '2.75'}}, {'William Hill': {'col_1': '1.40', 'odds_1': '1.44', 'col_2': '2.90', 'odds_2': '2.75'}}, {'1xBet': {'col_1': '1.37', 'odds_1': '1.46', 'col_2': '2.99', 'odds_2': '2.66'}}, {'Pinnacle': {'col_1': '1.40', 'odds_1': '1.47', 'col_2': '3.12', 'odds_2': '2.83'}}], 'Bopan/Kontinen - Norrie/Purcell': [{'veikkaus': {'odds_1': '1,13', 'odds_2': '5,00'}}], 'A.Blinkova - O.Jabeur': [{'veikkaus': {'odds_1': '1,65', 'odds_2': '2,10'}}, {'time': '14 Jan 2020, 02:00'}, {'bet365': {'col_1': '1.72', 'odds_1': '1.66', 'col_2': '2.00', 'odds_2': '2.10'}}, {'William Hill': {'col_1': '1.73', 'odds_1': '1.67', 'col_2': '2.10', 'odds_2': '2.20'}}, {'1xBet': {'col_1': '1.73', 'odds_1': '1.69', 'col_2': '2.07', 'odds_2': '2.08'}}, {'Pinnacle': {'col_1': '1.72', 'odds_1': '1.73', 'col_2': '2.21', 'odds_2': '2.19'}}], 'A.Van Uytvanck - A.Cornet': [{'veikkaus': {'odds_1': '1,68', 'odds_2': '2,05'}}, {'time': '14 Jan 2020, 02:00'}, {'bet365': {'col_1': '1.66', 'odds_1': '1.72', 'col_2': '2.10', 'odds_2': '2.00'}}, {'William Hill': {'col_1': '1.80', 'odds_1': '1.80', 'col_2': '2.00', 'odds_2': '2.00'}}, {'1xBet': {'col_1': '1.73', 'odds_1': '1.76', 'col_2': '2.07', 'odds_2': '2.03'}}, {'Pinnacle': {'col_1': '1.73', 'odds_1': '1.92', 'col_2': '2.20', 'odds_2': '1.95'}}], 'C.Bellis - M.Bouzkova': [{'veikkaus': {'odds_1': '2,20', 'odds_2': '1,60'}}, {'time': '14 Jan 2020, 02:00'}, {'bet365': {'col_1': '2.25', 'odds_1': '1.83', 'col_2': '1.57', 'odds_2': '1.83'}}, {'William Hill': {'col_1': '2.20', 'odds_1': '1.95', 'col_2': '1.67', 'odds_2': '1.85'}}, {'1xBet': {'col_1': '2.34', 'odds_1': '1.91', 'col_2': '1.64', 'odds_2': '1.86'}}, {'Pinnacle': {'col_1': '2.30', 'odds_1': '1.97', 'col_2': '1.67', 'odds_2': '1.90'}}], 'E.Mertens - C.McHale': [{'veikkaus': {'odds_1': '1,33', 'odds_2': '3,05'}}, {'time': '14 Jan 2020, 02:00'}, {'bet365': {'col_1': '1.33', 'odds_1': '1.33', 'col_2': '3.25', 'odds_2': '3.25'}}, {'William Hill': {'col_1': '1.33', 'odds_1': '1.33', 'col_2': '3.30', 'odds_2': '3.30'}}, {'1xBet': {'col_1': '1.35', 'odds_1': '1.34', 'col_2': '3.11', 'odds_2': '3.22'}}, {'Pinnacle': {'col_1': '1.37', 'odds_1': '1.37', 'col_2': '3.28', 'odds_2': '3.29'}}], 'E.Rybakina - T.Zidansek': [{'veikkaus': {'odds_1': '1,34', 'odds_2': '3,00'}}, {'time': '14 Jan 2020, 02:00'}, {'bet365': {'col_1': '1.36', 'odds_1': '1.44', 'col_2': '3.00', 'odds_2': '2.62'}}, {'William Hill': {'col_1': '1.33', 'odds_1': '1.50', 'col_2': '3.30', 'odds_2': '2.60'}}, {'1xBet': {'col_1': '1.36', 'odds_1': '1.43', 'col_2': '3.09', 'odds_2': '2.76'}}, {'Pinnacle': {'col_1': '1.39', 'odds_1': '1.41', 'col_2': '3.18', 'odds_2': '3.06'}}], 'K.Flipkens - Shuai Zhang': [{'veikkaus': {'odds_1': '2,60', 'odds_2': '1,43'}}], 'L.Cabrera - C.Garcia': [{'veikkaus': {'odds_1': '2,65', 'odds_2': '1,43'}}, {'time': '14 Jan 2020, 02:00'}, {'bet365': {'col_1': '2.62', 'odds_1': '2.62', 'col_2': '1.44', 'odds_2': '1.44'}}, {'William Hill': {'col_1': '2.62', 'odds_1': '2.62', 'col_2': '1.40', 'odds_2': '1.40'}}, {'1xBet': {'col_1': '2.64', 'odds_1': '2.76', 'col_2': '1.46', 'odds_2': '1.43'}}, {'Pinnacle': {'col_1': '2.69', 'odds_1': '2.89', 'col_2': '1.51', 'odds_2': '1.45'}}], 'Yafan Wang - G.Muguruza': [{'veikkaus': {'odds_1': '2,55', 'odds_2': '1,45'}}], 'A.Bedene - T.Paul': [{'veikkaus': {'odds_1': '1,85', 'odds_2': '1,85'}}, {'time': '14 Jan 2020, 03:00'}, {'bet365': {'col_1': '1.83', 'odds_1': '1.83', 'col_2': '1.83', 'odds_2': '1.83'}}, {'William Hill': {'col_1': '1.91', 'odds_1': '1.91', 'col_2': '1.91', 'odds_2': '1.91'}}, {'1xBet': {'col_1': '1.86', 'odds_1': '1.89', 'col_2': '1.90', 'odds_2': '1.92'}}, {'Pinnacle': {'col_1': '1.92', 'odds_1': '1.93', 'col_2': '1.95', 'odds_2': '1.93'}}], 'A.Ramos - J.Thompson': [{'veikkaus': {'odds_1': '2,35', 'odds_2': '1,53'}}, {'time': '14 Jan 2020, 03:00'}, {'bet365': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.50', 'odds_2': '1.50'}}, {'William Hill': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.53', 'odds_2': '1.53'}}, {'1xBet': {'col_1': '2.33', 'odds_1': '1.82', 'col_2': '1.58', 'odds_2': '1.98'}}, {'Pinnacle': {'col_1': '2.37', 'odds_1': '2.51', 'col_2': '1.63', 'odds_2': '1.57'}}], 'J-L.Struff - F.Verdasco': [{'veikkaus': {'odds_1': '1,53', 'odds_2': '2,35'}}, {'time': '14 Jan 2020, 03:00'}, {'bet365': {'col_1': '1.57', 'odds_1': '1.66', 'col_2': '2.25', 'odds_2': '2.10'}}, {'William Hill': {'col_1': '1.67', 'odds_1': '1.73', 'col_2': '2.20', 'odds_2': '2.10'}}, {'1xBet': {'col_1': '1.58', 'odds_1': '1.75', 'col_2': '2.33', 'odds_2': '2.08'}}, {'Pinnacle': {'col_1': '1.61', 'odds_1': '1.83', 'col_2': '2.42', 'odds_2': '2.05'}}], 'PH.Herbert - A.Bolt': [{'veikkaus': {'odds_1': '1,50', 'odds_2': '2,40'}}], 'A.Rodionova - S.Stephens': [{'veikkaus': {'odds_1': '2,95', 'odds_2': '1,35'}}], 'A.Sabalenka - SW.Hsieh': [{'veikkaus': {'odds_1': '1,32', 'odds_2': '3,10'}}], 'B.Pera - Strycova': [{'veikkaus': {'odds_1': '1,85', 'odds_2': '1,85'}}, {'time': '14 Jan 2020, 03:00'}, {'bet365': {'col_1': '1.83', 'odds_1': '1.83', 'col_2': '1.83', 'odds_2': '1.83'}}, {'William Hill': {'col_1': '1.91', 'odds_1': '1.91', 'col_2': '1.91', 'odds_2': '1.91'}}, {'1xBet': {'col_1': '1.91', 'odds_1': '1.72', 'col_2': '1.94', 'odds_2': '2.13'}}, {'Pinnacle': {'col_1': '1.94', 'odds_1': '1.92', 'col_2': '1.93', 'odds_2': '1.94'}}], 'J.Goerges - P.Hon': [{'veikkaus': {'odds_1': '1,22', 'odds_2': '3,85'}}, {'time': '14 Jan 2020, 03:00'}, {'bet365': {'col_1': '1.20', 'odds_1': '1.20', 'col_2': '4.33', 'odds_2': '4.33'}}, {'William Hill': {'col_1': '1.22', 'odds_1': '1.22', 'col_2': '4.20', 'odds_2': '4.20'}}, {'1xBet': {'col_1': '1.25', 'odds_1': '1.22', 'col_2': '4.14', 'odds_2': '4.12'}}, {'Pinnacle': {'col_1': '1.25', 'odds_1': '1.22', 'col_2': '4.26', 'odds_2': '4.72'}}], 'K.Bertens - M.Sakkari': [{'veikkaus': {'odds_1': '1,58', 'odds_2': '2,20'}}, {'time': '14 Jan 2020, 03:00'}, {'bet365': {'col_1': '1.57', 'odds_1': '1.57', 'col_2': '2.25', 'odds_2': '2.25'}}, {'William Hill': {'col_1': '1.62', 'odds_1': '1.67', 'col_2': '2.30', 'odds_2': '2.20'}}, {'1xBet': {'col_1': '1.68', 'odds_1': '1.53', 'col_2': '2.26', 'odds_2': '2.46'}}, {'Pinnacle': {'col_1': '1.67', 'odds_1': '1.57', 'col_2': '2.30', 'odds_2': '2.51'}}], 'T.Maria - Vondrousova': [{'veikkaus': {'odds_1': '2,80', 'odds_2': '1,39'}}, {'time': '14 Jan 2020, 03:00'}, {'bet365': {'col_1': '2.62', 'odds_1': '2.75', 'col_2': '1.44', 'odds_2': '1.40'}}, {'William Hill': {'col_1': '2.90', 'odds_1': '2.90', 'col_2': '1.40', 'odds_2': '1.40'}}, {'1xBet': {'col_1': '2.72', 'odds_1': '3.07', 'col_2': '1.49', 'odds_2': '1.38'}}, {'Pinnacle': {'col_1': '2.86', 'odds_1': '2.63', 'col_2': '1.46', 'odds_2': '1.53'}}], 'ATP  Australian Open': [{'veikkaus': {'odds_1': ' - ', 'odds_2': ' - '}}], 'WTA  Australian Open': [{'veikkaus': {'odds_1': ' - ', 'odds_2': ' - '}}]}

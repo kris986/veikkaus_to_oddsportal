@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from openpyxl import Workbook, load_workbook
 
@@ -66,14 +66,11 @@ def creat_xlsl_file():
     ws['AK2'] = 'col_1_6h'
     ws['AL2'] = 'col_2_6h'
 
-    # timestamp = datetime.now().strftime("%Y%m%d")
-    # file_name = 'result-' + timestamp + '.xlsx'
     wb.save(file_name)
     return file_name
 
 
 def xlsl_file_exists():
-    # file_name = 'result-' + datetime.now().strftime("%Y%m%d") + '.xlsx'
     try:
         work_book = load_workbook(file_name)
         return work_book
@@ -83,9 +80,6 @@ def xlsl_file_exists():
 
 
 def update_xlsl_file(matches_data):
-
-    # work_book = False
-    # file_name = 'result-' + datetime.now().strftime("%Y%m%d") + '.xlsx'
     work_book = xlsl_file_exists()
     if work_book:
         write_to_xlsl(work_book, matches_data)
@@ -98,6 +92,7 @@ def update_xlsl_file(matches_data):
 
 def match_exist_in_sheet(ws, match):
     print(f'Match: {match}')
+
     iter_rows = ws.iter_rows()
     for row in iter_rows:
         for cell in row:
@@ -116,9 +111,12 @@ def calc_delta_time(time):
         tm = datetime.strptime(time, '%d %b %Y %H %M')
         now = datetime.now()
         delta = tm - now
-        delta = round((delta.seconds / 3600), 2)
-        print(delta)
-        return delta
+        # print(delta)
+        delta = delta / timedelta(minutes=1)
+        # print(delta)
+        delta_m = round((delta / 60), 2)
+        print(delta_m)
+        return delta_m
     except ValueError:
         return 0
 
@@ -126,7 +124,7 @@ def calc_delta_time(time):
 def update_row(ws, num_of_row, inserting_row):
     # for creating coordinates of cell
     cols_for_changing = list()
-    cols = range(68, 92)
+    cols = range(66, 92)
     for col in cols:
         if col == 91:
             a_cols = range(65, 77)
@@ -135,57 +133,80 @@ def update_row(ws, num_of_row, inserting_row):
                 cols_for_changing.append(a_cols_for_changing)
         else:
             cols_for_changing.append(col)
-    ind = 3
 
-    for col in cols_for_changing:
-        ir = inserting_row[ind]
-        if ind < 6:
-            y = f'{chr(col)}{num_of_row}'
-            ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
-        elif ind in [8, 9, 16, 17, 24, 25, 32, 33]:
-           # calculate time. return delta time
-            delta = calc_delta_time(inserting_row[5])
-            # delta = 12
-            if 5.3 < delta < 6.8:
-                col_index = cols_for_changing.index(col) + 4
-                col = cols_for_changing[col_index]
-                if isinstance(col, list):
-                    z = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
-                    ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
-                else:
-                    p = f'{chr(col)}{num_of_row}'
-                    ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
-            elif 11.3 < delta < 12.8:
-                col_index = cols_for_changing.index(col) + 2
-                col = cols_for_changing[col_index]
-                if isinstance(col, list):
-                    x = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
-                    ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
-                else:
-                    o = f'{chr(col)}{num_of_row}'
-                    ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
+    # rewrite row if match in past time
+    if calc_delta_time(ws[f'F{num_of_row}'].value) < -2:
+        ind = 1
+        for col in cols_for_changing:
 
-        if isinstance(col, list):
-            if ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value == ' - ' and ind > 5:
+            if isinstance(col, list):
                 m = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
                 ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
-        else:
-            if ws[f'{chr(col)}{num_of_row}'].value == ' - ' and ind > 5:
+            else:
+                m = f'{chr(col)}{num_of_row}'
                 ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
-        ind += 1
+            ind += 1
+
+    else:
+        ind = 3
+        for col in cols_for_changing[2:]:
+            ir = inserting_row[ind]
+            if ind < 6:
+                y = f'{chr(col)}{num_of_row}'
+                ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
+            elif ind in [8, 9, 16, 17, 24, 25, 32, 33]:
+                # calculate time. return delta time
+                delta = calc_delta_time(inserting_row[5])
+                if 5.3 < delta < 6.8:
+                    col_index = cols_for_changing.index(col) + 4
+                    col = cols_for_changing[col_index]
+                    if isinstance(col, list):
+                        z = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
+                        ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
+                    else:
+                        p = f'{chr(col)}{num_of_row}'
+                        ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
+                elif 11.3 < delta < 12.8:
+                    col_index = cols_for_changing.index(col) + 2
+                    col = cols_for_changing[col_index]
+                    if isinstance(col, list):
+                        x = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
+                        ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
+                    else:
+                        o = f'{chr(col)}{num_of_row}'
+                        ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
+
+            if isinstance(col, list):
+                if ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value == ' - ' and ind > 5:
+                    m = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
+                    ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
+            else:
+                if ws[f'{chr(col)}{num_of_row}'].value == ' - ' and ind > 5:
+                    ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
+            ind += 1
 
 
 def write_to_xlsl(work_book, matches_data):
     timestamp = str(datetime.now().strftime("Last update: %d/%m/%Y %H:%M:%S"))
-    # file_name = 'result-' + datetime.now().strftime("%Y%m%d") + '.xlsx'
     ws = work_book.get_active_sheet()
-    # ws.append(timestamp)
     ws['A3'].value = timestamp  # inserting date of the last update
     for match in matches_data:
+        # only for test
+        if match[0] == 'K.Kozlova - Sorribes Tormo':
+            fail = inserting_row
+        # end test code
+
         match_exists = match_exist_in_sheet(ws, match)  # (int) return number of row where match is written
         if match_exists:
-            inserting_row = prpr_for_insrt_exst_mtch(matches_data[match])
-            inserting_row[0] = match
+            # calculate delta time. if past: create list of data as prpre_for_insrt_new_match
+            delta_t = -2.3
+            delta = calc_delta_time(ws[f'F{match_exists}'].value)
+            if delta < -2:
+                inserting_row = prpre_for_insrt_new_match(matches_data[match])
+                inserting_row[0] = match
+            else:
+                inserting_row = prpr_for_insrt_exst_mtch(matches_data[match])
+                inserting_row[0] = match
             update_row(ws, match_exists, inserting_row)
         else:
             inserting_row = prpre_for_insrt_new_match(matches_data[match])
@@ -194,4 +215,4 @@ def write_to_xlsl(work_book, matches_data):
     work_book.save(file_name)
 
 
-# calc_delta_time('12 Jan 2020, 17:00')
+# calc_delta_time('10 Jan 2020, 00:30')
