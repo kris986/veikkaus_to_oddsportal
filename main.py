@@ -50,62 +50,62 @@ if __name__ == "__main__":
     # vdisplay.start()
     veikkaus_url = 'https://www.veikkaus.fi/fi/pitkaveto?sportId=10&selectedLeagues=10-all'
     oddsportal_url = "https://www.oddsportal.com"
-    # driver = run_driver()
+    driver = run_driver()
     try:
-        # go_to_url(driver, veikkaus_url)
-        # print('Started collect data on veikkaus...')
-        # data_dict = veikkaus_base.collect_tennis_data(driver)
-        # print('Ended collect data on veikkaus')
-        # go_to_url(driver, oddsportal_url)
-        # print('Started collect data on oddsportal...')
-        # data_dict = oddssportal_base.collect_data_by_dict(driver, data_dict)
-        # print('Ended collect data on oddsportal')
-        data_dict = {
-            'L.Sonego - H.Hurkacz': [{'veikkaus': {'odds_1': '69', 'odds_2': '1,22'}}, {'time': '13 Jan 2020, 09:00'},
-                                     {'bet365': {'col_1': '4.00', 'odds_1': '69', 'col_2': '1.22', 'odds_2': '1.25'}},
-                                     {'William Hill': {'col_1': '4.20', 'odds_1': '3.40', 'col_2': '1.22',
-                                                       'odds_2': '1.25'}},
-                                     {'1xBet': {'col_1': '4.34', 'odds_1': '100500', 'col_2': '100500', 'odds_2': '100'}},
-                                     {'Pinnacle': {'col_1': '4.45', 'odds_1': '100500', 'col_2': '600',
-                                                   'odds_2': '1.28'}}],
-            'Pavlyuchenkova - A.Kontaveit': [{'veikkaus': {'odds_1': '2,50', 'odds_2': '1,45'}},
-                                             {'time': '13 Jan 2020, 00:30'}, {
-                                                 'bet365': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.50',
-                                                            'odds_2': '1.50'}}, {
-                                                 'William Hill': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.53',
-                                                                  'odds_2': '1.53'}}, {
-                                                 '1xBet': {'col_1': '2.59', 'odds_1': '2.42', 'col_2': '1.53',
-                                                           'odds_2': '1.57'}}, {
-                                                 'Pinnacle': {'col_1': '2.61', 'odds_1': '2.50', 'col_2': '1.54',
-                                                              'odds_2': '1.58'}}],
-            'F.Ferro - R.Peterson': [{'veikkaus': {'odds_1': '2,95', 'odds_2': '1,35'}}, {'time': '13 Jan 2020, 03:30'},
-                                     {'bet365': {'col_1': '3.00', 'odds_1': '3.00', 'col_2': '1.36', 'odds_2': '1.36'}},
-                                     {'William Hill': {'col_1': '2.90', 'odds_1': '3.10', 'col_2': '1.40',
-                                                       'odds_2': '1.36'}},
-                                     {'1xBet': {'col_1': '3.01', 'odds_1': '3.01', 'col_2': '1.37', 'odds_2': '1.37'}},
-                                     {'Pinnacle': {'col_1': '3.19', 'odds_1': '3.19', 'col_2': '1.39',
-                                                   'odds_2': '1.39'}}],
-
-            'D.Yastremska - T.Babos': [{'veikkaus': {'odds_1': '1,28', 'odds_2': '3,35'}},
-                                       {'time': '13 Jan 2020, 06:00'}, {
-                                           'bet365': {'col_1': '1.30', 'odds_1': '1.33', 'col_2': '3.40',
-                                                      'odds_2': '3.25'}}, {
-                                           'William Hill': {'col_1': '1.33', 'odds_1': '1.33', 'col_2': '3.30',
-                                                            'odds_2': '3.30'}}, {
-                                           '1xBet': {'col_1': '1.31', 'odds_1': '1.38', 'col_2': '3.60',
-                                                     'odds_2': '3.07'}}, {
-                                           'Pinnacle': {'col_1': '1.32', 'odds_1': '1.36', 'col_2': '3.66',
-                                                        'odds_2': '3.37'}}],
-            'Zhu Lin - V.Kuzmova': [{'veikkaus': {'odds_1': '1,53', 'odds_2': '2,35'}}],
-
-            'WTA  Australian Open': [{'veikkaus': {'odds_1': ' - ', 'odds_2': ' - '}}]}
+        go_to_url(driver, veikkaus_url)
+        print('Started collect data on veikkaus...')
+        data_dict = veikkaus_base.collect_tennis_data(driver)
+        print('Ended collect data on veikkaus')
+        go_to_url(driver, oddsportal_url)
+        print('Started collect data on oddsportal...')
+        data_dict = oddssportal_base.collect_data_by_dict(driver, data_dict)
+        print('Ended collect data on oddsportal')
+        # data_dict = {
+        #     'L.Sonego - H.Hurkacz': [{'veikkaus': {'odds_1': '69', 'odds_2': '1,22'}}, {'time': '13 Jan 2020, 09:00'},
+        #                              {'bet365': {'col_1': '4.00', 'odds_1': '69', 'col_2': '1.22', 'odds_2': '1.25'}},
+        #                              {'William Hill': {'col_1': '4.20', 'odds_1': '3.40', 'col_2': '1.22',
+        #                                                'odds_2': '1.25'}},
+        #                              {'1xBet': {'col_1': '4.34', 'odds_1': '100500', 'col_2': '100500', 'odds_2': '100'}},
+        #                              {'Pinnacle': {'col_1': '4.45', 'odds_1': '100500', 'col_2': '600',
+        #                                            'odds_2': '1.28'}}],
+        #     'Pavlyuchenkova - A.Kontaveit': [{'veikkaus': {'odds_1': '2,50', 'odds_2': '1,45'}},
+        #                                      {'time': '13 Jan 2020, 00:30'}, {
+        #                                          'bet365': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.50',
+        #                                                     'odds_2': '1.50'}}, {
+        #                                          'William Hill': {'col_1': '2.50', 'odds_1': '2.50', 'col_2': '1.53',
+        #                                                           'odds_2': '1.53'}}, {
+        #                                          '1xBet': {'col_1': '2.59', 'odds_1': '2.42', 'col_2': '1.53',
+        #                                                    'odds_2': '1.57'}}, {
+        #                                          'Pinnacle': {'col_1': '2.61', 'odds_1': '2.50', 'col_2': '1.54',
+        #                                                       'odds_2': '1.58'}}],
+        #     'F.Ferro - R.Peterson': [{'veikkaus': {'odds_1': '2,95', 'odds_2': '1,35'}}, {'time': '13 Jan 2020, 03:30'},
+        #                              {'bet365': {'col_1': '3.00', 'odds_1': '3.00', 'col_2': '1.36', 'odds_2': '1.36'}},
+        #                              {'William Hill': {'col_1': '2.90', 'odds_1': '3.10', 'col_2': '1.40',
+        #                                                'odds_2': '1.36'}},
+        #                              {'1xBet': {'col_1': '3.01', 'odds_1': '3.01', 'col_2': '1.37', 'odds_2': '1.37'}},
+        #                              {'Pinnacle': {'col_1': '3.19', 'odds_1': '3.19', 'col_2': '1.39',
+        #                                            'odds_2': '1.39'}}],
+        #
+        #     'D.Yastremska - T.Babos': [{'veikkaus': {'odds_1': '1,28', 'odds_2': '3,35'}},
+        #                                {'time': '13 Jan 2020, 06:00'}, {
+        #                                    'bet365': {'col_1': '1.30', 'odds_1': '1.33', 'col_2': '3.40',
+        #                                               'odds_2': '3.25'}}, {
+        #                                    'William Hill': {'col_1': '1.33', 'odds_1': '1.33', 'col_2': '3.30',
+        #                                                     'odds_2': '3.30'}}, {
+        #                                    '1xBet': {'col_1': '1.31', 'odds_1': '1.38', 'col_2': '3.60',
+        #                                              'odds_2': '3.07'}}, {
+        #                                    'Pinnacle': {'col_1': '1.32', 'odds_1': '1.36', 'col_2': '3.66',
+        #                                                 'odds_2': '3.37'}}],
+        #     'Zhu Lin - V.Kuzmova': [{'veikkaus': {'odds_1': '1,53', 'odds_2': '2,35'}}],
+        #
+        #     'WTA  Australian Open': [{'veikkaus': {'odds_1': ' - ', 'odds_2': ' - '}}]}
         print('Creating excel file')
         update_xlsl_file(data_dict)
         print('Parsing is finished')
     except Exception as inst:
         print(sys.exc_info())
     finally:
-        # driver.close()
+        driver.close()
         # vdisplay.stop()
         quit()
 

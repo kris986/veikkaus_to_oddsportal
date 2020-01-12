@@ -1,8 +1,3 @@
-from datetime import datetime
-
-from openpyxl import Workbook, load_workbook
-
-
 def check_and_handle_key(dictinary, key):
     if key in dictinary:
         return dictinary[key]
