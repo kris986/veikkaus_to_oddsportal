@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 import urllib
 from time import sleep
 from xvfbwrapper import Xvfb
@@ -60,8 +61,11 @@ if __name__ == "__main__":
         print('Creating excel file')
         update_xlsl_file(data_dict)
         print('Parsing is finished')
-    except Exception as e:
-        print(e)
+    except Exception as inst:
+        print(type(inst))  # экземпляр исключения
+        print(inst.args)  # аргументы хранимые в .args
+        print(inst)
+        print(sys.exc_info())
     finally:
         driver.close()
         vdisplay.stop()
