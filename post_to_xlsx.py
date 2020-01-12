@@ -110,7 +110,6 @@ def calc_delta_time(time):
         now = datetime.now()
         delta = tm - now
         delta = round((delta.seconds / 3600), 2)
-        print(delta)
         return delta
     except ValueError:
         return 0
