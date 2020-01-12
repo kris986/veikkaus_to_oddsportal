@@ -62,9 +62,6 @@ if __name__ == "__main__":
         update_xlsl_file(data_dict)
         print('Parsing is finished')
     except Exception as inst:
-        print(type(inst))  # экземпляр исключения
-        print(inst.args)  # аргументы хранимые в .args
-        print(inst)
         print(sys.exc_info())
     finally:
         driver.close()

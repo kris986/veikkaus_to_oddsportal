@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from openpyxl import Workbook, load_workbook
 
@@ -65,6 +65,7 @@ def creat_xlsl_file():
     ws['AJ2'] = 'col_2_12h'
     ws['AK2'] = 'col_1_6h'
     ws['AL2'] = 'col_2_6h'
+
     wb.save(file_name)
     return file_name
 
@@ -90,7 +91,6 @@ def update_xlsl_file(matches_data):
 
 
 def match_exist_in_sheet(ws, match):
-    print(f'Match: {match}')
     iter_rows = ws.iter_rows()
     for row in iter_rows:
         for cell in row:
@@ -108,9 +108,8 @@ def calc_delta_time(time):
         time = time.replace(',', '').replace(':', ' ')
         tm = datetime.strptime(time, '%d %b %Y %H %M')
         now = datetime.now()
-        delta = tm - now
-        delta = round((delta.seconds / 3600), 2)
-        print(delta)
+        delta = (tm - now) / timedelta(minutes=1)
+        delta = round((delta / 60), 2)
         return delta
     except ValueError:
         return 0
@@ -119,7 +118,7 @@ def calc_delta_time(time):
 def update_row(ws, num_of_row, inserting_row):
     # for creating coordinates of cell
     cols_for_changing = list()
-    cols = range(68, 92)
+    cols = range(66, 92)
     for col in cols:
         if col == 91:
             a_cols = range(65, 77)
@@ -128,43 +127,47 @@ def update_row(ws, num_of_row, inserting_row):
                 cols_for_changing.append(a_cols_for_changing)
         else:
             cols_for_changing.append(col)
-    ind = 3
-    for col in cols_for_changing:
-        ir = inserting_row[ind]
-        if ind < 6:
-            y = f'{chr(col)}{num_of_row}'
-            ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
-        elif ind in [8, 9, 16, 17, 24, 25, 32, 33]:
-           # calculate time. return delta time
-            delta = calc_delta_time(inserting_row[5])
-            # delta = 12
-            if 5.3 < delta < 6.8:
-                col_index = cols_for_changing.index(col) + 4
-                col = cols_for_changing[col_index]
-                if isinstance(col, list):
-                    z = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
-                    ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
-                else:
-                    p = f'{chr(col)}{num_of_row}'
-                    ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
-            elif 11.3 < delta < 12.8:
-                col_index = cols_for_changing.index(col) + 2
-                col = cols_for_changing[col_index]
-                if isinstance(col, list):
-                    x = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
-                    ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
-                else:
-                    o = f'{chr(col)}{num_of_row}'
-                    ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
 
-        if isinstance(col, list):
-            if ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value == ' - ' and ind > 5:
-                m = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
+    # rewrite row if match in past time
+    if calc_delta_time(ws[f'F{num_of_row}'].value) < -2:
+        ind = 1
+        for col in cols_for_changing:
+            if isinstance(col, list):
                 ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
-        else:
-            if ws[f'{chr(col)}{num_of_row}'].value == ' - ' and ind > 5:
+            else:
                 ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
-        ind += 1
+            ind += 1
+
+    else:
+        ind = 3
+        for col in cols_for_changing[2:]:
+            if ind < 6:
+                ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
+            elif ind in [8, 9, 16, 17, 24, 25, 32, 33]:
+                # calculate time. return delta time
+                delta = calc_delta_time(inserting_row[5])
+                if 5.3 < delta < 6.8:
+                    col_index = cols_for_changing.index(col) + 4
+                    col = cols_for_changing[col_index]
+                    if isinstance(col, list):
+                        ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
+                    else:
+                        ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
+                elif 11.3 < delta < 12.8:
+                    col_index = cols_for_changing.index(col) + 2
+                    col = cols_for_changing[col_index]
+                    if isinstance(col, list):
+                        ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
+                    else:
+                        ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
+
+            if isinstance(col, list):
+                if ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value == ' - ' and ind > 5:
+                    ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
+            else:
+                if ws[f'{chr(col)}{num_of_row}'].value == ' - ' and ind > 5:
+                    ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
+            ind += 1
 
 
 def write_to_xlsl(work_book, matches_data):
@@ -174,8 +177,14 @@ def write_to_xlsl(work_book, matches_data):
     for match in matches_data:
         match_exists = match_exist_in_sheet(ws, match)  # (int) return number of row where match is written
         if match_exists:
-            inserting_row = prpr_for_insrt_exst_mtch(matches_data[match])
-            inserting_row[0] = match
+            # calculate delta time. if past: create list of data as new match|prpre_for_insrt_new_match()
+            delta = calc_delta_time(ws[f'F{match_exists}'].value)
+            if delta < -2:
+                inserting_row = prpre_for_insrt_new_match(matches_data[match])
+                inserting_row[0] = match
+            else:
+                inserting_row = prpr_for_insrt_exst_mtch(matches_data[match])
+                inserting_row[0] = match
             update_row(ws, match_exists, inserting_row)
         else:
             inserting_row = prpre_for_insrt_new_match(matches_data[match])
