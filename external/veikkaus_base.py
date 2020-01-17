@@ -14,16 +14,23 @@ class VeikkausBase:
         for element in box:
             soup = BeautifulSoup(element.get_attribute('innerHTML'), 'html.parser')
             details = soup.find('div', {'class': 'event-row'})
+            odd_dict = dict()
             for detail in details:
                 source_list = list()
                 dtls_dict = dict()
+                # odd_dict = dict()
                 checker_class = detail.get_attribute_list('class')
                 if 'event-info' in checker_class:
                     event_title = detail.find('span', {'class': 'event-title'}).text
                     game_dict[event_title] = source_list
 
+                    event_description = detail.find('span', {'class': 'event-description'}).text
+                    odd_dict['event_description'] = event_description
+                    dtls_dict[source_name] = odd_dict
+                    source_list.append(dtls_dict)
+
                 elif 'event-outcome-holder' in checker_class:
-                    odd_dict = dict()
+
                     if len(detail.find('div', {'class': 'events-details'}).contents) <= 1:
                         odds_1, odds_2 = ' - ', ' - '
                     else:
