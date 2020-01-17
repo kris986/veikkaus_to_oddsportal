@@ -104,7 +104,6 @@ def update_xlsl_file(matches_data):
 
 
 def match_exist_in_sheet(ws, match):
-    print(f'Match: {match}')
     iter_rows = ws.iter_rows()
     for row in iter_rows:
         for cell in row:
