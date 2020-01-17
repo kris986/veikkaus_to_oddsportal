@@ -155,24 +155,24 @@ def update_row(ws, num_of_row, inserting_row):
                 col_index = cols_for_changing.index(col) + 4
                 col = cols_for_changing[col_index]
                 if isinstance(col, list):
-                    z = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
+                    # z = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
                     ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
                 else:
-                    p = f'{chr(col)}{num_of_row}'
+                    # p = f'{chr(col)}{num_of_row}'
                     ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
             elif 11.3 < delta < 12.8:
                 col_index = cols_for_changing.index(col) + 2
                 col = cols_for_changing[col_index]
                 if isinstance(col, list):
-                    x = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
+                    # x = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
                     ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
                 else:
-                    o = f'{chr(col)}{num_of_row}'
+                    # o = f'{chr(col)}{num_of_row}'
                     ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
 
         if isinstance(col, list):
             if ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value == ' - ' and ind > 6:
-                m = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
+                # m = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
                 ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
         else:
             if ws[f'{chr(col)}{num_of_row}'].value == ' - ' and ind > 6:
