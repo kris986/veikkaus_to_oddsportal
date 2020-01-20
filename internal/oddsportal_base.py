@@ -122,7 +122,9 @@ class OddsportalBase:
 
     def collect_result(self, driver):
         try:
-            result = driver.find_element_by_css_selector('some_css_selector').text
+            result = driver.find_element_by_css_selector('p.result').text
+
+            # <div  id = "event-status" xeid = "CQpz7bce"><p class ="result"><span class ="bold">Final result</span><strong>2:0</strong> (6:2, 6:4) </p></ div>            return result
             return result
         except NoSuchElementException:
             return False
