@@ -244,20 +244,16 @@ def analyze_existing_matches(driver):
                         if -6 < delta < -0.01:
                             match_name = row[0].value
                             match_dict[match_name] = []
+                            # for collecting coefficients after start match
                             if -2 < delta < -0.01:
-                                # for collecting coefficients after start match
                                 match_dict = oddsportal.collect_data_by_dict(driver, match_dict)
-                                # event_status = oddsportal.event_status(driver)
-                                # if event_status == 'started':
                                 update_started_cells(ws, cell.row, match_dict)
-
-                            #  TODO prototype result posting to exl
+                            # for collecting result of match
                             elif -6 < delta <= -2:
                                 oddsportal.try_searching(driver, match_name)
                                 if oddsportal.handling_search_results_page(driver, match_name):
                                     result = oddsportal.collect_result_of_match(driver)
                                     if result:
-                                        # print(f'{match_name}')
                                         update_cell(ws, f'AV{cell.row}', result)
             ind_row += 1
     work_book.save(file_name)
