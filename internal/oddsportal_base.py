@@ -13,25 +13,25 @@ from selenium.webdriver.support.wait import WebDriverWait
 class OddsportalBase:
 
     def collect_data_by_dict(self, driver, data_dict):
+        chkr = 1
         for event_title in data_dict:
-            print(f'Collecting event {event_title}')
-            self.try_searching(driver, event_title)
-            if self.handling_search_results_page(driver, event_title):
-                time_dict = dict()
-                time = driver.find_element_by_css_selector('div#col-content p.date').text
-                time = re.sub(r'^[a-zA-Z]*,\s', '', time)
-                time_dict['time'] = time
-                data_dict[event_title].append(time_dict)
-                bet365 = self.collect_bookmaker(driver, 'bet365')
-                data_dict[event_title].append(bet365)
-                william_hill = self.collect_bookmaker(driver, 'William Hill')
-                data_dict[event_title].append(william_hill)
-                onexbet = self.collect_bookmaker(driver, '1xBet')
-                data_dict[event_title].append(onexbet)
-                pinnacle = self.collect_bookmaker(driver, 'Pinnacle')
-                data_dict[event_title].append(pinnacle)
-            else:
-                pass
+            print(f'Handling {chkr} from {len(data_dict)}\nCollecting event {event_title}')
+            if self.try_searching(driver, event_title):
+                if self.handling_search_results_page(driver, event_title):
+                    time_dict = dict()
+                    time = driver.find_element_by_css_selector('div#col-content p.date').text
+                    time = re.sub(r'^[a-zA-Z]*,\s', '', time)
+                    time_dict['time'] = time
+                    data_dict[event_title].append(time_dict)
+                    bet365 = self.collect_bookmaker(driver, 'bet365')
+                    data_dict[event_title].append(bet365)
+                    william_hill = self.collect_bookmaker(driver, 'William Hill')
+                    data_dict[event_title].append(william_hill)
+                    onexbet = self.collect_bookmaker(driver, '1xBet')
+                    data_dict[event_title].append(onexbet)
+                    pinnacle = self.collect_bookmaker(driver, 'Pinnacle')
+                    data_dict[event_title].append(pinnacle)
+            chkr += 1
         return data_dict
 
     def try_searching(self, driver, phrase):
@@ -42,27 +42,33 @@ class OddsportalBase:
             driver.find_element_by_css_selector('a#search-submit').click()
             sleep(2)
             self.wait_visibility_css_selector(driver, 'div.spc.filterOpts')
-        except NoSuchElementException as e:
-            print(e.msg)
-            pass
+            return True
+        except TimeoutException:
+            driver.refresh()
+            return False
+        except NoSuchElementException:
+            return False
 
     def handling_search_results_page(self, driver, search_phrase):
-        result_phrase = driver.find_elements_by_css_selector('td.name a')
-        for a in result_phrase:
-            if '/tennis/' in a.get_attribute('href'):
-                if self.compare_phrase_and_results(search_phrase, a.text):
-                    a.click()
-                    self.wait_visibility_css_selector(driver, 'div#tab-nav-main')
-                    return driver
-                else:
-                    return False
+        try:
+            result_phrase = driver.find_elements_by_css_selector('td.name a')
+            for a in result_phrase:
+                if '/tennis/' in a.get_attribute('href'):
+                    if self.compare_phrase_and_results(search_phrase, a.text):
+                        a.click()
+                        self.wait_visibility_css_selector(driver, 'div#tab-nav-main')
+                        return driver
+
+            return False
+        except TimeoutException:
+            driver.refresh()
+            return False
+        except NoSuchElementException:
+            return False
 
     def wait_visibility_css_selector(self, driver, element, timeout=20):
-        try:
             WebDriverWait(driver, timeout).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, element)))
-        except TimeoutException as e:
-            print(e.msg)
 
     def collect_bookmaker(self, driver, bookmaker_name):
         bookmaker_dict = dict()
@@ -109,10 +115,14 @@ class OddsportalBase:
         result_phrase = result_phrase.upper()
         search_list = set(search_phrase.split(' '))
         result_list = set(result_phrase.split(' '))
-        # print(search_list)  # For testing
-        # print(result_list)
-        # print(result_list.symmetric_difference(search_list))
         if len(result_list.symmetric_difference(search_list)) <= 1:
             return True
         else:
+            return False
+
+    def collect_result(self, driver):
+        try:
+            result = driver.find_element_by_css_selector('some_css_selector').text
+            return result
+        except NoSuchElementException:
             return False
