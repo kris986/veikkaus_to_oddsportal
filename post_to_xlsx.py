@@ -128,8 +128,6 @@ def calc_delta_time(time):
         now = datetime.now()
         delta = (tm - now) / timedelta(minutes=1)
         delta = round((delta / 60), 2)
-        # delta = tm - now
-        # delta = round((delta.seconds / 3600), 2)
         return delta
     except ValueError:
         return 0
@@ -151,9 +149,7 @@ def update_row(ws, num_of_row, inserting_row):
     ws[f'B{num_of_row}'].value = inserting_row[1]
     ind = 4
     for col in cols_for_changing:
-        # ir = inserting_row[ind]
         if ind < 7:
-            y = f'{chr(col)}{num_of_row}'
             ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
         elif ind in [9, 10, 19, 20, 29, 30, 39, 40]:
             # calculate time. return delta time
@@ -162,24 +158,19 @@ def update_row(ws, num_of_row, inserting_row):
                 col_index = cols_for_changing.index(col) + 4
                 col = cols_for_changing[col_index]
                 if isinstance(col, list):
-                    # z = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
                     ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
                 else:
-                    # p = f'{chr(col)}{num_of_row}'
                     ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
             elif 11.3 < delta < 12.8:
                 col_index = cols_for_changing.index(col) + 2
                 col = cols_for_changing[col_index]
                 if isinstance(col, list):
-                    # x = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
                     ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
                 else:
-                    # o = f'{chr(col)}{num_of_row}'
                     ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
 
         if isinstance(col, list):
             if ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value == ' - ' and ind > 6:
-                # m = f'{chr(col[0])}{chr(col[1])}{num_of_row}'
                 ws[f'{chr(col[0])}{chr(col[1])}{num_of_row}'].value = inserting_row[ind]
         else:
             if ws[f'{chr(col)}{num_of_row}'].value == ' - ' and ind > 6:
@@ -206,18 +197,12 @@ def write_to_xlsl(work_book, matches_data):
             if delta < - 6:
                 ws.delete_rows(match_exists)
                 creating_new_matchs_row(ws, matches_data[match], match)
-                # inserting_row = prpre_for_insrt_new_match(matches_data[match])
-                # inserting_row[0] = match
-                # ws.append(inserting_row)
             else:
                 inserting_row = prpr_for_insrt_exst_mtch(matches_data[match])
                 inserting_row[0] = match
                 update_row(ws, match_exists, inserting_row)
         else:
             creating_new_matchs_row(ws, matches_data[match], match)
-            # inserting_row = prpre_for_insrt_new_match(matches_data[match])
-            # inserting_row[0] = match
-            # ws.append(inserting_row)
     work_book.save(file_name)
 
 
