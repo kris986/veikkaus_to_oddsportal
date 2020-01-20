@@ -204,7 +204,7 @@ def write_to_xlsl(work_book, matches_data):
         if match_exists:
             # calculate delta time. if past: create list of data as new match|prpre_for_insrt_new_match()
             delta = calc_delta_time(ws[f'G{match_exists}'].value)
-            if delta < - 6:
+            if delta < - 10:
                 ws.delete_rows(match_exists)
                 creating_new_matchs_row(ws, matches_data[match], match)
                 # inserting_row = prpre_for_insrt_new_match(matches_data[match])
@@ -244,7 +244,7 @@ def update_started_cells(ws, row, match):
                     update_cell(ws, f'AU{row}', check_and_handle_key(block[key], 'col_2'))
 
 
-def analyze_existing_matches(driver=None):
+def analyze_existing_matches(driver):
     work_book = xlsl_file_exists()
     if work_book:
         ws = work_book.get_active_sheet()
@@ -257,21 +257,23 @@ def analyze_existing_matches(driver=None):
                         match_time = cell.value
                         match_dict = dict()
                         delta = calc_delta_time(match_time)
-                        if -5 < delta < -0.01:
+                        if -6 < delta < -0.01:
                             match_name = row[0].value
                             match_dict[match_name] = []
                             if -2 < delta < -0.01:
                                 # for collecting coefficients after start match
                                 match_dict = oddsportal.collect_data_by_dict(driver, match_dict)
+                                # event_status = oddsportal.event_status(driver)
+                                # if event_status == 'started':
                                 update_started_cells(ws, cell.row, match_dict)
 
                             #  TODO prototype result posting to exl
-                            elif -5 < delta <= -2:
+                            elif -6 < delta <= -2:
                                 oddsportal.try_searching(driver, match_name)
-                                oddsportal.handling_search_results_page(driver, match_name)
-                                result = oddsportal.collect_result(driver)
-                                if result:
-                                    update_cell(ws, f'AV{cell.row}', result)
-
+                                if oddsportal.handling_search_results_page(driver, match_name):
+                                    result = oddsportal.collect_result_of_match(driver)
+                                    if result:
+                                        # print(f'{match_name}')
+                                        update_cell(ws, f'AV{cell.row}', result)
             ind_row += 1
     work_book.save(file_name)

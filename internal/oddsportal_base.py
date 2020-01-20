@@ -120,11 +120,23 @@ class OddsportalBase:
         else:
             return False
 
-    def collect_result(self, driver):
+    def collect_result_of_match(self, driver):
         try:
-            result = driver.find_element_by_css_selector('p.result').text
-
+            result = driver.find_element_by_css_selector('div#event-status p.result')
+            result = re.sub(r'Final result ', '', result.get_attribute('innerHTML'))
+            result = (result.replace('<sup>', '/')).replace('</sup>', '')
+            soup = BeautifulSoup(result, 'html.parser')
             # <div  id = "event-status" xeid = "CQpz7bce"><p class ="result"><span class ="bold">Final result</span><strong>2:0</strong> (6:2, 6:4) </p></ div>            return result
-            return result
+            # <div id="event-status" xeid="6L97Ne62"><p class="result"><span class="bold">Final result </span><strong>1:3</strong> (6<sup>5</sup>:7, 2:6, 6:2, 1:6)</p></div>
+            return soup.text
+        except NoSuchElementException:
+            return False
+
+    def event_status(self, driver):
+        try:
+            started = 'started'
+            status = driver.find_element_by_css_selector('div#event-status p.result-alert span')
+            if status.text == 'The match has already started.':
+                return started
         except NoSuchElementException:
             return False
