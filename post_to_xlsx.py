@@ -266,13 +266,12 @@ def analyze_existing_matches(driver=None):
                                 update_started_cells(ws, cell.row, match_dict)
 
                             #  TODO prototype result posting to exl
-                            # elif -5 < delta <= -2:
-                            # for collecting coefficients after start match
-                            # oddsportal.try_searching(driver, match_name)
-                            # oddsportal.handling_search_results_page(driver, match_name)
-                            # result = oddsportal.collect_result(driver)
-                            # update_cell(ws, coordinate, result)
-                            # print(delta, '-5 < delta <= -2')
+                            elif -5 < delta <= -2:
+                                oddsportal.try_searching(driver, match_name)
+                                oddsportal.handling_search_results_page(driver, match_name)
+                                result = oddsportal.collect_result(driver)
+                                if result:
+                                    update_cell(ws, f'AV{cell.row}', result)
 
             ind_row += 1
     work_book.save(file_name)
