@@ -1,12 +1,17 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from openpyxl import Workbook, load_workbook
 
 from build_xlsx import prpre_for_insrt_new_match
 from build_xlsx import prpr_for_insrt_exst_mtch
 
+from internal.oddsportal_base import OddsportalBase
+
+from build_xlsx import check_and_handle_key
+
 file_name = 'result.xlsx'
 index_of_time = 6
+oddsportal = OddsportalBase()
 
 
 def creat_xlsl_file():
@@ -122,8 +127,10 @@ def calc_delta_time(time):
         time = time.replace(',', '').replace(':', ' ')
         tm = datetime.strptime(time, '%d %b %Y %H %M')
         now = datetime.now()
-        delta = tm - now
-        delta = round((delta.seconds / 3600), 2)
+        delta = (tm - now) / timedelta(minutes=1)
+        delta = round((delta / 60), 2)
+        # delta = tm - now
+        # delta = round((delta.seconds / 3600), 2)
         return delta
     except ValueError:
         return 0
@@ -141,6 +148,8 @@ def update_row(ws, num_of_row, inserting_row):
                 cols_for_changing.append(a_cols_for_changing)
         else:
             cols_for_changing.append(col)
+    # updating Tournament_title
+    ws[f'B{num_of_row}'].value = inserting_row[1]
     ind = 4
     for col in cols_for_changing:
         # ir = inserting_row[ind]
@@ -148,9 +157,8 @@ def update_row(ws, num_of_row, inserting_row):
             y = f'{chr(col)}{num_of_row}'
             ws[f'{chr(col)}{num_of_row}'].value = inserting_row[ind]
         elif ind in [9, 10, 19, 20, 29, 30, 39, 40]:
-           # calculate time. return delta time
+            # calculate time. return delta time
             delta = calc_delta_time(inserting_row[index_of_time])
-            # delta = 12
             if 5.3 < delta < 6.8:
                 col_index = cols_for_changing.index(col) + 4
                 col = cols_for_changing[col_index]
@@ -180,18 +188,91 @@ def update_row(ws, num_of_row, inserting_row):
         ind += 1
 
 
+def creating_new_matchs_row(ws, match_dict, match_name):
+    inserting_row = prpre_for_insrt_new_match(match_dict)
+    inserting_row[0] = match_name
+    ws.append(inserting_row)
+
+
 def write_to_xlsl(work_book, matches_data):
     timestamp = str(datetime.now().strftime("Last update: %d/%m/%Y %H:%M:%S"))
     ws = work_book.get_active_sheet()
-    ws['A3'].value = timestamp  # inserting date of the last update
+    # inserting date of the last update
+    ws['A3'].value = timestamp
     for match in matches_data:
         match_exists = match_exist_in_sheet(ws, match)  # (int) return number of row where match is written
         if match_exists:
-            inserting_row = prpr_for_insrt_exst_mtch(matches_data[match])
-            inserting_row[0] = match
-            update_row(ws, match_exists, inserting_row)
+            # calculate delta time. if past: create list of data as new match|prpre_for_insrt_new_match()
+            delta = calc_delta_time(ws[f'G{match_exists}'].value)
+            if delta < - 6:
+                ws.delete_rows(match_exists)
+                creating_new_matchs_row(ws, matches_data[match], match)
+                # inserting_row = prpre_for_insrt_new_match(matches_data[match])
+                # inserting_row[0] = match
+                # ws.append(inserting_row)
+            else:
+                inserting_row = prpr_for_insrt_exst_mtch(matches_data[match])
+                inserting_row[0] = match
+                update_row(ws, match_exists, inserting_row)
         else:
-            inserting_row = prpre_for_insrt_new_match(matches_data[match])
-            inserting_row[0] = match
-            ws.append(inserting_row)
+            creating_new_matchs_row(ws, matches_data[match], match)
+            # inserting_row = prpre_for_insrt_new_match(matches_data[match])
+            # inserting_row[0] = match
+            # ws.append(inserting_row)
+    work_book.save(file_name)
+
+
+def update_cell(ws, coordinate, value):
+    ws[coordinate].value = value
+
+
+def update_started_cells(ws, row, match):
+    for item in match:
+        for block in match[item]:
+            for key in block:
+                if key == 'bet365':
+                    update_cell(ws, f'P{row}', check_and_handle_key(block[key], 'col_1'))
+                    update_cell(ws, f'Q{row}', check_and_handle_key(block[key], 'col_2'))
+                elif key == 'William Hill':
+                    update_cell(ws, f'Z{row}', check_and_handle_key(block[key], 'col_1'))
+                    update_cell(ws, f'AA{row}', check_and_handle_key(block[key], 'col_2'))
+                elif key == '1xBet':
+                    update_cell(ws, f'AJ{row}', check_and_handle_key(block[key], 'col_1'))
+                    update_cell(ws, f'AK{row}', check_and_handle_key(block[key], 'col_2'))
+                elif key == 'Pinnacle':
+                    update_cell(ws, f'AT{row}', check_and_handle_key(block[key], 'col_1'))
+                    update_cell(ws, f'AU{row}', check_and_handle_key(block[key], 'col_2'))
+
+
+def analyze_existing_matches(driver=None):
+    work_book = xlsl_file_exists()
+    if work_book:
+        ws = work_book.get_active_sheet()
+        iter_rows = ws.iter_rows()
+        ind_row = 0
+        for row in iter_rows:
+            if ind_row >= 3:
+                for cell in row:
+                    if cell.column == 7:
+                        match_time = cell.value
+                        match_dict = dict()
+                        delta = calc_delta_time(match_time)
+                        if -5 < delta < -0.01:
+                            match_name = row[0].value
+                            match_dict[match_name] = []
+                            if -2 < delta < -0.01:
+                                # for collecting coefficients after start match
+                                match_dict = oddsportal.collect_data_by_dict(driver, match_dict)
+                                update_started_cells(ws, cell.row, match_dict)
+
+                            #  TODO prototype result posting to exl
+                            # elif -5 < delta <= -2:
+                            # for collecting coefficients after start match
+                            # oddsportal.try_searching(driver, match_name)
+                            # oddsportal.handling_search_results_page(driver, match_name)
+                            # result = oddsportal.collect_result(driver)
+                            # update_cell(ws, coordinate, result)
+                            # print(delta, '-5 < delta <= -2')
+
+            ind_row += 1
     work_book.save(file_name)
