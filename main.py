@@ -63,8 +63,8 @@ if __name__ == "__main__":
         data_dict = oddssportal_base.collect_data_by_dict(driver, data_dict)
         print('Ended collect data on oddsportal')
         print('Creating excel file')
-        update_xlsl_file(data_dict)
         analyze_existing_matches(driver)
+        update_xlsl_file(data_dict)
         print('Parsing is finished')
     except Exception as inst:
         log.exception('Это сообщение об ошибке:')
