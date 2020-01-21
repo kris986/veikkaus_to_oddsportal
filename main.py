@@ -59,14 +59,16 @@ if __name__ == "__main__":
         data_dict = veikkaus_base.collect_tennis_data(driver)
         print('Ended collect data on veikkaus')
         go_to_url(driver, oddsportal_url)
-        # analyzing existing matches and collecting match results
-        analyze_existing_matches(driver)
         print('Started collect data on oddsportal...')
         data_dict = oddssportal_base.collect_data_by_dict(driver, data_dict)
         print('Ended collect data on oddsportal')
         print('Creating excel file')
         update_xlsl_file(data_dict)
         print('Parsing is finished')
+        print('Analyzing excl file')
+        # analyzing existing matches and collecting match results
+        analyze_existing_matches(driver)
+        print('Ended analyze excl file')
     except Exception as inst:
         log.exception('Это сообщение об ошибке:')
     finally:
