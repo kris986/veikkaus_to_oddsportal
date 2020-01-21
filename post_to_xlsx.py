@@ -237,6 +237,7 @@ def analyze_existing_matches(driver):
         for row in iter_rows:
             if ind_row >= 3:
                 for cell in row:
+                    # column contain time of match
                     if cell.column == 7:
                         match_time = cell.value
                         match_dict = dict()

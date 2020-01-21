@@ -59,11 +59,12 @@ if __name__ == "__main__":
         data_dict = veikkaus_base.collect_tennis_data(driver)
         print('Ended collect data on veikkaus')
         go_to_url(driver, oddsportal_url)
+        # analyzing existing matches and collecting match results
+        analyze_existing_matches(driver)
         print('Started collect data on oddsportal...')
         data_dict = oddssportal_base.collect_data_by_dict(driver, data_dict)
         print('Ended collect data on oddsportal')
         print('Creating excel file')
-        analyze_existing_matches(driver)
         update_xlsl_file(data_dict)
         print('Parsing is finished')
     except Exception as inst:
