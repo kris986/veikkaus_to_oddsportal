@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import logging
+import sys
 import urllib
 from time import sleep
 from xvfbwrapper import Xvfb
@@ -71,4 +72,4 @@ if __name__ == "__main__":
     finally:
         driver.close()
         vdisplay.stop()
-        quit()
+        sys.exit()
