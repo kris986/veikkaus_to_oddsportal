@@ -65,8 +65,11 @@ if __name__ == "__main__":
         print('Ended collect data on oddsportal')
         print('Creating excel file')
         update_xlsl_file(data_dict)
-        analyze_existing_matches(driver)
         print('Parsing is finished')
+        print('Analyzing excl file')
+        # analyzing existing matches and collecting match results
+        analyze_existing_matches(driver)
+        print('Ended analyze excl file')
     except Exception as inst:
         log.exception('Это сообщение об ошибке:')
     finally:

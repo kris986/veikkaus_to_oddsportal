@@ -1,3 +1,4 @@
+import difflib
 from time import sleep
 import re
 
@@ -110,12 +111,21 @@ class OddsportalBase:
         finally:
             return bookmaker_dict
 
+    # calculate comparing percents of 2 phrases
+    def similarity(self, s1, s2):
+        normalized1 = s1.lower()
+        normalized2 = s2.lower()
+        matcher = difflib.SequenceMatcher(None, normalized1, normalized2)
+        return matcher.ratio()
+
     def compare_phrase_and_results(self, search_phrase, result_phrase):
-        search_phrase = search_phrase.replace('.', '. ').upper()
-        result_phrase = result_phrase.upper()
-        search_list = set(search_phrase.split(' '))
-        result_list = set(result_phrase.split(' '))
-        if len(result_list.symmetric_difference(search_list)) <= 1:
+        search_phrase = search_phrase.replace('.', '. ').replace('-', ' ')
+        result_phrase = result_phrase.replace('-', ' ')
+        search_list = sorted(list(search_phrase.split(' ')))
+        result_list = sorted(list(result_phrase.split(' ')))
+        sf = ' '.join(search_list)
+        rf = ' '.join(result_list)
+        if self.similarity(sf, rf) >= 0.85:
             return True
         else:
             return False
