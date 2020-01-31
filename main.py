@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 import logging
+import sys
 import urllib
-from pprint import pprint
 from time import sleep
 from xvfbwrapper import Xvfb
-import sentry_sdk
-from sentry_sdk import capture_exception
+
 
 from selenium import webdriver
+import sentry_sdk
+from sentry_sdk import capture_exception
 from external.veikkaus_base import VeikkausBase
 from internal.oddsportal_base import OddsportalBase
 from selenium.webdriver.chrome.options import Options
@@ -18,10 +19,10 @@ log = logging.getLogger(__name__)
 
 veikkaus_base = VeikkausBase()
 oddssportal_base = OddsportalBase()
-sentry_sdk.init("https://61b92881c93b447aacba6df4ba5690dc@sentry.io/2097752")
 
 
 vdisplay = Xvfb()
+sentry_sdk.init("https://61b92881c93b447aacba6df4ba5690dc@sentry.io/2097752")
 
 
 # version for Linux
@@ -60,7 +61,6 @@ if __name__ == "__main__":
         go_to_url(driver, veikkaus_url)
         print('Started collect data on veikkaus...')
         data_dict = veikkaus_base.collect_tennis_data(driver)
-
         print('Ended collect data on veikkaus')
         go_to_url(driver, oddsportal_url)
         print('Started collect data on oddsportal...')
@@ -79,4 +79,4 @@ if __name__ == "__main__":
     finally:
         driver.close()
         vdisplay.stop()
-        quit()
+        sys.exit()
