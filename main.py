@@ -21,7 +21,7 @@ veikkaus_base = VeikkausBase()
 oddssportal_base = OddsportalBase()
 
 
-vdisplay = Xvfb()
+vdisplay = Xvfb(width=1280, height=720)
 sentry_sdk.init("https://61b92881c93b447aacba6df4ba5690dc@sentry.io/2097752")
 
 

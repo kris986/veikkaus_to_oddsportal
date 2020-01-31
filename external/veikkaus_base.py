@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 from internal.oddsportal_base import OddsportalBase
+from sentry_sdk import capture_exception
 
 
 class VeikkausBase:
@@ -59,5 +60,6 @@ class VeikkausBase:
                 "//li[(contains(@class,'event-group-event')  and not(contains(@class, 'target-row')) and not(contains(@class, 'hidden')))]")
             print('Boxes with data were founded')
             return box
-        except(NoSuchElementException, TimeoutException):
+        except(NoSuchElementException, TimeoutException) as e:
+            capture_exception(e)
             return False
