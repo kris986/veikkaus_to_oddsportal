@@ -3,6 +3,8 @@ import logging
 import urllib
 from time import sleep
 from xvfbwrapper import Xvfb
+import sentry_sdk
+from sentry_sdk import capture_exception
 
 from selenium import webdriver
 from external.veikkaus_base import VeikkausBase
@@ -15,6 +17,7 @@ log = logging.getLogger(__name__)
 
 veikkaus_base = VeikkausBase()
 oddssportal_base = OddsportalBase()
+sentry_sdk.init("https://61b92881c93b447aacba6df4ba5690dc@sentry.io/2097752")
 
 
 vdisplay = Xvfb()
@@ -55,21 +58,22 @@ if __name__ == "__main__":
     driver = run_driver()
     try:
         go_to_url(driver, veikkaus_url)
-        print('Started collect data on veikkaus...')
+        # print('Started collect data on veikkaus...')
         data_dict = veikkaus_base.collect_tennis_data(driver)
-        print('Ended collect data on veikkaus')
+        # print('Ended collect data on veikkaus')
         go_to_url(driver, oddsportal_url)
-        print('Started collect data on oddsportal...')
+        # print('Started collect data on oddsportal...')
         data_dict = oddssportal_base.collect_data_by_dict(driver, data_dict)
-        print('Ended collect data on oddsportal')
-        print('Creating excel file')
+        # print('Ended collect data on oddsportal')
+        # print('Creating excel file')
         update_xlsl_file(data_dict)
-        print('Parsing is finished')
-        print('Analyzing excl file')
+        # print('Parsing is finished')
+        # print('Analyzing excl file')
         # analyzing existing matches and collecting match results
         analyze_existing_matches(driver)
-        print('Ended analyze excl file')
-    except Exception as inst:
+        # print('Ended analyze excl file')
+    except Exception as e:
+        capture_exception(e)
         log.exception('Это сообщение об ошибке:')
     finally:
         driver.close()
