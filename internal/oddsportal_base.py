@@ -16,7 +16,7 @@ class OddsportalBase:
     def collect_data_by_dict(self, driver, data_dict):
         chkr = 1
         for event_title in data_dict:
-            # print(f'Handling {chkr} from {len(data_dict)}\nCollecting event {event_title}')
+            print(f'Handling {chkr} from {len(data_dict)}\nCollecting event {event_title}')
             if self.try_searching(driver, event_title):
                 if self.handling_search_results_page(driver, event_title):
                     time_dict = dict()
