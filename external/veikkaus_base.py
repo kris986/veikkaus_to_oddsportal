@@ -9,7 +9,9 @@ class VeikkausBase:
     def collect_tennis_data(self, driver):
         source_name = 'veikkaus'
         game_dict = dict()
-        sleep(2)
+
+        print(driver.current_url)
+        sleep(5)
         box = driver.find_elements_by_xpath(
             "//li[(contains(@class,'event-group-event')  and not(contains(@class, 'target-row')) and not(contains(@class, 'hidden')))]")
         for element in box:
