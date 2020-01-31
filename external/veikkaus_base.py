@@ -18,6 +18,7 @@ class VeikkausBase:
         if box:
             print(len(box))
             for element in box:
+                print(element.text)
                 soup = BeautifulSoup(element.get_attribute('innerHTML'), 'html.parser')
                 details = soup.find('div', {'class': 'event-row'})
                 odd_dict = dict()
@@ -59,6 +60,7 @@ class VeikkausBase:
             box = driver.find_elements_by_xpath(
                 "//li[(contains(@class,'event-group-event')  and not(contains(@class, 'target-row')) and not(contains(@class, 'hidden')))]")
             print('Boxes with data were founded')
+            print(type(box))
             return box
         except(NoSuchElementException, TimeoutException) as e:
             capture_exception(e)
