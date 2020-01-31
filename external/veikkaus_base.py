@@ -54,7 +54,7 @@ class VeikkausBase:
 
     def collect_data_on_page(self, driver):
         try:
-            self.odds_base.wait_visibility_css_selector(driver, 'div#pitkaveto-sub-navigation-container', timeout=40)
+            # self.odds_base.wait_visibility_css_selector(driver, 'div#pitkaveto-sub-navigation-container', timeout=40)
             print('div#pitkaveto-sub-navigation-container EXISTS')
             box = driver.find_elements_by_xpath(
                 "//li[(contains(@class,'event-group-event')  and not(contains(@class, 'target-row')) and not(contains(@class, 'hidden')))]")
