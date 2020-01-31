@@ -1,3 +1,4 @@
+from pprint import pprint
 from time import sleep
 
 from bs4 import BeautifulSoup
@@ -13,6 +14,8 @@ class VeikkausBase:
             "//li[(contains(@class,'event-group-event')  and not(contains(@class, 'target-row')) and not(contains(@class, 'hidden')))]")
         for element in box:
             soup = BeautifulSoup(element.get_attribute('innerHTML'), 'html.parser')
+            pprint(soup)
+            sleep(5)
             details = soup.find('div', {'class': 'event-row'})
             odd_dict = dict()
             for detail in details:

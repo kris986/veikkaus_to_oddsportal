@@ -60,8 +60,7 @@ if __name__ == "__main__":
         go_to_url(driver, veikkaus_url)
         print('Started collect data on veikkaus...')
         data_dict = veikkaus_base.collect_tennis_data(driver)
-        pprint(data_dict)
-        sleep(5)
+
         print('Ended collect data on veikkaus')
         go_to_url(driver, oddsportal_url)
         print('Started collect data on oddsportal...')
