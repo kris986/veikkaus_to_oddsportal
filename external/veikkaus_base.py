@@ -15,8 +15,8 @@ class VeikkausBase:
         source_name = 'veikkaus'
         game_dict = dict()
         box = self.collect_data_on_page(driver)
-        print(len(box))
         if box:
+            print(len(box))
             for element in box:
                 soup = BeautifulSoup(element.get_attribute('innerHTML'), 'html.parser')
                 details = soup.find('div', {'class': 'event-row'})
@@ -54,7 +54,7 @@ class VeikkausBase:
 
     def collect_data_on_page(self, driver):
         try:
-            self.odds_base.wait_visibility_css_selector(driver, 'div#pitkaveto-sub-navigation-container', timeout=20)
+            self.odds_base.wait_visibility_css_selector(driver, 'div#pitkaveto-sub-navigation-container', timeout=40)
             print('div#pitkaveto-sub-navigation-container EXISTS')
             box = driver.find_elements_by_xpath(
                 "//li[(contains(@class,'event-group-event')  and not(contains(@class, 'target-row')) and not(contains(@class, 'hidden')))]")
