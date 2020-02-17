@@ -5,7 +5,10 @@ import urllib
 from time import sleep
 from xvfbwrapper import Xvfb
 
+
 from selenium import webdriver
+import sentry_sdk
+from sentry_sdk import capture_exception
 from external.veikkaus_base import VeikkausBase
 from internal.oddsportal_base import OddsportalBase
 from selenium.webdriver.chrome.options import Options
@@ -18,7 +21,8 @@ veikkaus_base = VeikkausBase()
 oddssportal_base = OddsportalBase()
 
 
-vdisplay = Xvfb()
+vdisplay = Xvfb(width=1280, height=720)
+sentry_sdk.init("https://61b92881c93b447aacba6df4ba5690dc@sentry.io/2097752")
 
 
 # version for Linux
@@ -32,10 +36,10 @@ def run_driver():
 
 # version for Windows
 # def run_driver():
-    # init driver with options if script will run on Win Corporate version or Pro
-    # options = webdriver.ChromeOptions()
-    # options.add_argument('--disable-features=RendererCodeIntegrity')
-    # driver = webdriver.Chrome(options=options)
+#     # init driver with options if script will run on Win Corporate version or Pro
+#     options = webdriver.ChromeOptions()
+#     options.add_argument('--disable-features=RendererCodeIntegrity')
+#     driver = webdriver.Chrome(options=options)
 
     # driver = webdriver.Chrome()
     # return driver
@@ -43,7 +47,6 @@ def run_driver():
 
 def go_to_url(driver, page_url, pref_url=''):
     url = urllib.parse.urljoin(page_url, pref_url)
-    print('Driver run')
     driver.get(url)
     sleep(2)
     return driver
@@ -56,21 +59,22 @@ if __name__ == "__main__":
     driver = run_driver()
     try:
         go_to_url(driver, veikkaus_url)
-        print('Started collect data on veikkaus...')
+        # print('Started collect data on veikkaus...')
         data_dict = veikkaus_base.collect_tennis_data(driver)
-        print('Ended collect data on veikkaus')
+        # print('Ended collect data on veikkaus')
         go_to_url(driver, oddsportal_url)
-        print('Started collect data on oddsportal...')
+        # print('Started collect data on oddsportal...')
         data_dict = oddssportal_base.collect_data_by_dict(driver, data_dict)
-        print('Ended collect data on oddsportal')
-        print('Creating excel file')
+        # print('Ended collect data on oddsportal')
+        # print('Creating excel file')
         update_xlsl_file(data_dict)
-        print('Parsing is finished')
-        print('Analyzing excl file')
+        # print('Parsing is finished')
+        # print('Analyzing excl file')
         # analyzing existing matches and collecting match results
         analyze_existing_matches(driver)
-        print('Ended analyze excl file')
-    except Exception as inst:
+        # print('Ended analyze excl file')
+    except Exception as e:
+        capture_exception(e)
         log.exception('Это сообщение об ошибке:')
     finally:
         driver.close()
