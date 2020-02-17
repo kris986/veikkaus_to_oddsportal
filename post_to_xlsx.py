@@ -123,8 +123,6 @@ def match_exist_in_sheet(ws, match):
 
 def calc_delta_time(time):
     try:
-        if time is None:
-            return 0
         time = time.replace(',', '').replace(':', ' ')
         tm = datetime.strptime(time, '%d %b %Y %H %M')
         now = datetime.now()
