@@ -74,5 +74,6 @@ if __name__ == "__main__":
         log.exception('Это сообщение об ошибке:')
     finally:
         driver.close()
+        driver.quit()
         vdisplay.stop()
         sys.exit()
