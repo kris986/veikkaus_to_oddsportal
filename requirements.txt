@@ -2,4 +2,4 @@ beautifulsoup4==4.8.2
 openpyxl==3.0.2
 selenium==3.141.0
 xvfbwrapper==0.2.9
-sentry_sdk==0.14.1
+sentry_sdk==1.14.0
